@@ -15,7 +15,7 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Početna</a>
+        <a class="nav-link" href="/">Početna</a>
       </li>
       @auth
       <li class="nav-item">
@@ -33,6 +33,11 @@
       <li class="nav-item">
         <a class="nav-link" href="#">Usluge</a>
       </li>
+      @if(Auth::check() && in_array(Auth::user()->role, [2, 3]))
+      <li class="nav-item">
+        <a class="nav-link" href="/cms">CMS</a>
+      </li>
+      @endif
       <li class="nav-item">
         <a class="nav-link" href="#">Kontakt</a>
       </li>

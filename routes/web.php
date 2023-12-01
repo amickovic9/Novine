@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CMSController;
+use App\Http\Controllers\NewsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,3 +22,8 @@ Route::get('/login',[UserController::class,'showLoginPage']);
 Route::post('/login',[UserController::class,'loginUser']);
 Route::post('/register',[UserController::class,'registerUser']);
 Route::get('/logout',[UserController::class,'logoutUser']);
+
+//cms
+Route::get('/cms',[CMSController::class,'showCMSScreen']);
+Route::get('/cms/create-post',[CMSController::class, 'showCreatePostScreen']);
+Route::post('/cms/create-post',[NewsController::class, 'createPost']);
