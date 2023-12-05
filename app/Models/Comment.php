@@ -5,15 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class News extends Model
+class Comment extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'naslov',
-        'tekst',
-        'rubrika',
+        'article_id',
+        'user_name',
+        'comment',
     ];
-    public function comments(){
-        return $this->hasMany(Comments::class,'article_id');
-    }
 }

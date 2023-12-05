@@ -16,4 +16,7 @@ class NewsController extends Controller
         News::create($fields);
         return redirect('/cms')->with('success','Uspesno ste kreirali clanak');
     }
+    public function showArticle(News $article){
+        return view('article',['article' => $article]);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\News;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,5 +42,9 @@ class UserController extends Controller
     public function logoutUser(){
         Auth::logout();
         return redirect('/');
+    }
+    public function showHomePage(){
+        $news = News::all();
+        return view('home',['news' => $news]);
     }
 }

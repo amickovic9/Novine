@@ -9,10 +9,12 @@
 </head>
 <body>
 @include('navbar')
-@auth
-    <p>cao</p>
-@else
-<p>nisi log</p>
-@endauth
+@foreach ($news as $article)
+    <div>
+        Naslov: {{$article['naslov']}}
+        <a href="/article/{{$article['id']}}">Vise</a>
+    </div>
+@endforeach
+
 </body>
 </html>
