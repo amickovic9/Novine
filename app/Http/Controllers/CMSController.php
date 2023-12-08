@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -32,5 +33,31 @@ class CMSController extends Controller
     public function deleteUser(User $user){
         $user->delete();
         return back()->with('succes','Uspesno ste izbrisali korisnika!');
+    }
+    public function showNovinar(){
+        
+    }
+    public function showCategories(){
+        $categories = Category::all();
+        return view('cms.categories',['categories' => $categories]);
+    }
+    public function addCategory(Request $request){
+        $field = $request->validate([
+            'category' => 'required',
+        ]);
+        Category::create($field);
+        return back()->with('success','Uspesno ste dodali novu rubriku!');
+    }
+    public function editCategory(Category $category, Request $request){
+        $field= $request->validate([
+            'nameOfCategory' =>'required',
+        ]);
+        $fields['category'] = $field['nameOfCategory'];;
+        $category->update($fields);
+        return back()->with('success','Uspesno ste izmenili naziv rubrike!');
+    }
+    public function deleteCategory(Category $category){
+        $category->delete();
+        return back()->with('success','Uspesno ste izbrisali rubriku!');
     }
 }

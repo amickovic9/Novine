@@ -36,3 +36,8 @@ Route::get('/cms/users',[CMSController::class,'showUsers'])->middleware('cms');
 Route::get('/cms/edit-user/{user}',[CMSController::class,'showEditUser'])->middleware('cms');
 Route::post('/cms/update-user/{user}',[CMSController::class,'editUser'])->middleware('cms');
 Route::get('/cms/delete-user/{user}',[CMSController::class,'deleteUser'])->middleware('cms');
+Route::get('/cms/novinari',[CMSController::class,'showNovinar'])->middleware('cms');
+Route::get('/cms/categories',[CMSController::class,'showCategories'])->middleware('cms');
+Route::post('/cms/add-category',[CMSController::class,'addCategory'])->middleware('cms');
+Route::post('/cms/edit-category/{category}',[CMSController::class,'editCategory']);
+Route::get('/cms/delete-category/{category}',[CMSController::class,'deleteCategory'])->middleware();
