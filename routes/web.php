@@ -4,6 +4,7 @@ use App\Http\Controllers\CMSController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\UserController;
+use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,9 +24,15 @@ Route::post('/register',[UserController::class,'registerUser']);
 Route::get('/logout',[UserController::class,'logoutUser']);
 Route::get('/article/{article}',[NewsController::class,'showArticle']);
 Route::post('/add-comment',[CommentController::class,'addComment']);
+//novinar
 
+//urednik
 
 //cms
-Route::get('/cms',[CMSController::class,'showCMSScreen']);
-Route::get('/cms/create-post',[CMSController::class, 'showCreatePostScreen']);
-Route::post('/cms/create-post',[NewsController::class, 'createPost']);
+Route::get('/cms',[CMSController::class,'showCMSScreen'])->middleware('cms');
+Route::get('/cms/create-post',[CMSController::class, 'showCreatePostScreen'])->middleware('cms');
+Route::post('/cms/create-post',[NewsController::class, 'createPost'])->middleware('cms');
+Route::get('/cms/users',[CMSController::class,'showUsers'])->middleware('cms');
+Route::get('/cms/edit-user/{user}',[CMSController::class,'showEditUser'])->middleware('cms');
+Route::post('/cms/update-user/{user}',[CMSController::class,'editUser'])->middleware('cms');
+Route::get('/cms/delete-user/{user}',[CMSController::class,'deleteUser'])->middleware('cms');

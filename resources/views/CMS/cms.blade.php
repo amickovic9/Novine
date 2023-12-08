@@ -11,6 +11,7 @@
     <div class="container">
         <h1>Upravljanje</h1>
         <a href="/cms/create-post">Dodaj objavu</a>
+        <a href="/cms/users">Upravljanje korisnicima</a>
     </div>
 
 

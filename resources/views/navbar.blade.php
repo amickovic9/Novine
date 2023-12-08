@@ -33,7 +33,7 @@
       <li class="nav-item">
         <a class="nav-link" href="#">Usluge</a>
       </li>
-      @if(Auth::check() && in_array(Auth::user()->role, [2, 3]))
+      @if(Auth::check() && Auth::user()->role==4)
       <li class="nav-item">
         <a class="nav-link" href="/cms">CMS</a>
       </li>
