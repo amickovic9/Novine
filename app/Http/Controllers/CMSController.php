@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\User;
+use App\Models\UserCategories;
+use App\Models\Users_categories;
 use Illuminate\Http\Request;
 
 class CMSController extends Controller
@@ -34,9 +36,15 @@ class CMSController extends Controller
         $user->delete();
         return back()->with('succes','Uspesno ste izbrisali korisnika!');
     }
-    public function showNovinar(){
-        
+   public function showNovinar(){
+        $novinari = User::query()
+            ->with('categories') 
+            ->where('role', 'like', '2')
+            ->get();
+        return view('cms.novinari', ['novinari' => $novinari]);
     }
+
+
     public function showCategories(){
         $categories = Category::all();
         return view('cms.categories',['categories' => $categories]);
@@ -57,7 +65,40 @@ class CMSController extends Controller
         return back()->with('success','Uspesno ste izmenili naziv rubrike!');
     }
     public function deleteCategory(Category $category){
+        $category->users()->detach();
         $category->delete();
         return back()->with('success','Uspesno ste izbrisali rubriku!');
     }
+    public function removeCategoryFromJournalist(Request $request){
+        $id = $request->input('userCategoryId');
+        $userCategory = Users_categories::find($id);
+        $userCategory->delete();
+        return back()->with('success','Uspesno ste uklonili novinara sa date rubrike');
+    }
+    public function showUpdateJournalist(User $journalist){
+        $allCategories = Category::all(); 
+        $userCategories = Users_categories::where('user_id', $journalist->id)->pluck('category_id')->toArray();
+        return view('cms.edit-journalist', [
+            'journalist' => $journalist,
+            'allCategories' => $allCategories,
+            'userCategories' => $userCategories,
+        ]);
+    }
+    
+   
+    public function updateJournalistCategories(User $journalist, Request $request){
+        $userCategories = $journalist->categories()->pluck('categories.id')->toArray();
+        $newCategories = $request->input('categories');
+
+        $addedCategories = array_diff($newCategories, $userCategories);
+
+        if (!empty($addedCategories)) {
+            $journalist->categories()->attach($addedCategories);
+        }
+
+        return redirect('/cms/novinari')->with('success', 'Kategorije su uspešno ažurirane.');
+    }
+    
+
+
 }

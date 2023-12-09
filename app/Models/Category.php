@@ -11,4 +11,9 @@ class Category extends Model
     protected $fillable = [
         'category'
     ];
+   
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'users_categories', 'category_id', 'user_id')->withPivot('id');
+    }
 }

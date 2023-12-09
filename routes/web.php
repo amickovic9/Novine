@@ -40,4 +40,8 @@ Route::get('/cms/novinari',[CMSController::class,'showNovinar'])->middleware('cm
 Route::get('/cms/categories',[CMSController::class,'showCategories'])->middleware('cms');
 Route::post('/cms/add-category',[CMSController::class,'addCategory'])->middleware('cms');
 Route::post('/cms/edit-category/{category}',[CMSController::class,'editCategory']);
-Route::get('/cms/delete-category/{category}',[CMSController::class,'deleteCategory'])->middleware();
+Route::get('/cms/delete-category/{category}',[CMSController::class,'deleteCategory'])->middleware('cms');
+Route::get('/cms/remove-category-from-journalist',[CMSController::class,'removeCategoryFromJournalist'])->middleware('cms');
+Route::get('/cms/update-journalist/{journalist}',[CMSController::class,'showUpdateJournalist'])->middleware('cms');
+Route::post('/cms/update-journalist/{journalist}',[CMSController::class,'updateJournalistCategories'])->middleware('cms');
+
