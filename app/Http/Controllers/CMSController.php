@@ -73,32 +73,56 @@ class CMSController extends Controller
         $id = $request->input('userCategoryId');
         $userCategory = Users_categories::find($id);
         $userCategory->delete();
-        return back()->with('success','Uspesno ste uklonili novinara sa date rubrike');
+        return back()->with('success','Uspesno ste uklonili korisnika sa date rubrike');
     }
-    public function showUpdateJournalist(User $journalist){
+    public function showUpdateEJ(User $user){
         $allCategories = Category::all(); 
-        $userCategories = Users_categories::where('user_id', $journalist->id)->pluck('category_id')->toArray();
+        $userCategories = Users_categories::where('user_id', $user->id)->pluck('category_id')->toArray();
         return view('cms.edit-journalist', [
-            'journalist' => $journalist,
+            'journalist' => $user,
             'allCategories' => $allCategories,
             'userCategories' => $userCategories,
         ]);
     }
     
    
-    public function updateJournalistCategories(User $journalist, Request $request){
-        $userCategories = $journalist->categories()->pluck('categories.id')->toArray();
+    public function updateCategoriesEJ(User $user, Request $request) {
+        $userCategories = $user->categories()->pluck('categories.id')->toArray();
         $newCategories = $request->input('categories');
 
-        $addedCategories = array_diff($newCategories, $userCategories);
-
-        if (!empty($addedCategories)) {
-            $journalist->categories()->attach($addedCategories);
+        if (!is_array($newCategories)) {
+            $newCategories = [];
         }
 
-        return redirect('/cms/novinari')->with('success', 'Kategorije su uspešno ažurirane.');
+        $categoriesToRemove = array_diff($userCategories, $newCategories);
+        $categoriesToAdd = array_diff($newCategories, $userCategories);
+        $categoriesToRemove = array_diff($userCategories, $newCategories);
+        $categoriesToAdd = array_diff($newCategories, $userCategories);
+
+        if (!empty($categoriesToRemove)) {
+            $user->categories()->detach($categoriesToRemove);
+        }
+
+        if (!empty($categoriesToAdd)) {
+            $user->categories()->sync($categoriesToAdd);
+        } elseif (empty($categoriesToAdd) && empty($newCategories)) {
+            $user->categories()->detach(); // Ukloni sve kategorije ako nisu izabrane nove
+        }
+
+        if ($user->role == 2) {
+            return redirect('/cms/journalist')->with('success', 'Kategorije su uspešno ažurirane.');
+        } elseif ($user->role == 3) {
+            return redirect('/cms/editors')->with('success', 'Kategorije su uspešno ažurirane.');
+        }
     }
-    
+
+
+    public function showEditors(){
+        $editors = User::query()
+            ->where('role', 'like', '3')
+            ->get();
+        return view('cms.editors',['editors' =>$editors]);
+    }
 
 
 }

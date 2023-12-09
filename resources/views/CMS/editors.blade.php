@@ -4,25 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Upravljanje novinarima</title>
+    <title>Upravljanje urednicima</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     @include('navbar')
     <div class="container mt-4">
-        @foreach($novinari as $novinar)
+        <h1>Upravljanje urednicima</h1>
+        @foreach ($editors as $editor)
             <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="card-title">Ime: {{ $novinar->name }}</h5>
-                    <a href="/cms/update-journalist/{{$novinar->id}}" class="btn btn-primary btn-sm">Uredi</a>
-                </div>
                 <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">Rubrike:</h6>
+                    <h5 class="card-title">Ime: {{$editor->name}}</h5>
+                    <a href="/cms/edit-editor/{{$editor->id}}" class="btn btn-primary btn-sm mb-2">Izmeni</a>
                     <ul class="list-group">
-                        @foreach($novinar->categories as $category)
+                        @foreach ($editor->categories as $category)
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 {{ $category->category }}
-                                 
                                 <form method="get" action="/cms/remove-category-from-journalist">
                                     @csrf
                                     <input type="hidden" name="userCategoryId" value="{{ $category->pivot->id }}">

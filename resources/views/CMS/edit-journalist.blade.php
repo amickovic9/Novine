@@ -5,17 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Uredi novinara</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Možete dodati dodatni stil ovde */
+    </style>
 </head>
 <body>
-   @include('navbar')
-<div class="container">
-    <form method="POST" action="">
-        @csrf
-        <div class="row mt-4">
-            <div class="col-md-6">
-                <h3>{{ $journalist->name }} - rubrike</h3>
-                <div class="list-group">
-                    @foreach($allCategories as $category)
+    @include('navbar')
+    <div class="container mt-4">
+        <form method="POST" action="">
+            @csrf
+            <h3>{{ $journalist->name }} - rubrike</h3>
+            <div class="row">
+                @foreach($allCategories as $category)
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
                         <label class="list-group-item">
                             <input type="checkbox" 
                                    name="categories[]" 
@@ -24,13 +27,14 @@
                             >
                             {{ $category->category }}
                         </label>
-                    @endforeach
-                </div>
-                <button type="submit" class="btn btn-primary mt-3">Sačuvaj</button>
+                    </div>
+                @endforeach
             </div>
-        </div>
-    </form>
-</div>
+            <button type="submit" class="btn btn-primary mt-3">Sačuvaj</button>
+        </form>
+    </div>
 
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 </body>
 </html>
