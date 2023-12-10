@@ -46,6 +46,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Category::class, 'users_categories', 'user_id', 'category_id')->withPivot('id');
     }
+    public function news(){
+        return $this->hasMany(News::class,'user_id');
+    }
     
 
 }

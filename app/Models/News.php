@@ -9,11 +9,15 @@ class News extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'user_id',
         'naslov',
         'tekst',
         'rubrika',
     ];
     public function comments(){
         return $this->hasMany(Comments::class,'article_id');
+    }
+    public function user(){
+        return $this->hasOne(User::class,'user_id');
     }
 }

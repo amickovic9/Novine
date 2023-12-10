@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\News;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NewsController extends Controller
 {
@@ -13,10 +14,17 @@ class NewsController extends Controller
             'tekst' => 'required',
             'rubrika' => 'required',
         ]);
+        $fields['user_id'] = Auth::user()->id;
         News::create($fields);
-        return redirect('/cms')->with('success','Uspesno ste kreirali clanak');
+        if(Auth::user()->role == 4){
+            return redirect('/cms')->with('success','Uspesno ste kreirali clanak');
+        }
+        else if(Auth::user()->role == 2){
+            return redirect('/cms-journalist/drafts')->with('success','Uspesno ste kreirali clanak');
+        }
     }
     public function showArticle(News $article){
         return view('article',['article' => $article]);
     }
+   
 }

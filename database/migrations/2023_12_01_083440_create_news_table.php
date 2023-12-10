@@ -15,9 +15,11 @@ class CreateNewsTable extends Migration
     {
         Schema::create('news', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id');
             $table->string('naslov');
             $table->string('tekst');
             $table->string('rubrika');
+            $table->boolean('draft')->default(0);
             $table->timestamps();
         });
     }

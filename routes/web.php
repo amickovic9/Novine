@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\CMSController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\NewsController;
-use App\Http\Controllers\UserController;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CMSController;
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\JournalistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,13 @@ Route::get('/logout',[UserController::class,'logoutUser']);
 Route::get('/article/{article}',[NewsController::class,'showArticle']);
 Route::post('/add-comment',[CommentController::class,'addComment']);
 //novinar
+Route::get('/cms-journalist',[JournalistController::class,'showCMS'])->middleware('journalist');
+Route::get('/cms-journalist/drafts',[JournalistController::class,'showDrafts'])->middleware('journalist');
+Route::get('/cms-journalist/create-post',[JournalistController::class,'showCreatePost'])->middleware('journalist');
+Route::post('/cms-journalist/create-post',[NewsController::class, 'createPost'])->middleware('journalist');
+Route::get('/cms-journalist/delete/{article}',[JournalistController::class,'deletePost'])->middleware('journalist');
+Route::get('/cms-journalist/edit/{article}',[JournalistController::class,'showEditPost'])->middleware('journalist');
+Route::post('/cms-journalist/edit/{article}',[JournalistController::class,'editPost'])->middleware('journalist');
 
 //urednik
 
@@ -47,3 +55,6 @@ Route::post('/cms/update-journalist/{user}',[CMSController::class,'updateCategor
 Route::get('/cms/editors',[CMSController::class,'showEditors'])->middleware('cms');
 Route::get('/cms/edit-editor/{user}',[CMSController::class,'showUpdateEJ'])->middleware('cms');
 Route::post('/cms/edit-editor/{user}',[CMSController::class,'updateCategoriesEJ'])->middleware('cms');
+
+
+
