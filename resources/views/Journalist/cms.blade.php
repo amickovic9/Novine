@@ -14,6 +14,7 @@
         <div class="mb-3">
             <a href="/cms-journalist/drafts" class="btn btn-primary mr-2">Moji draftovi</a>
             <a href="/cms-journalist/create-post" class="btn btn-success">Novi članak</a>
+            <a href="/cms-journalist/articles" class="btn btn-secondary">Moji članci</a>
         </div>
     </div>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

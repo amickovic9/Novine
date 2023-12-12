@@ -24,7 +24,8 @@ class NewsController extends Controller
         }
     }
     public function showArticle(News $article){
-        return view('article',['article' => $article]);
+        $comments = $article->comments()->get();
+        return view('article',['article' => $article,'comments'=>$comments]);
     }
    
 }

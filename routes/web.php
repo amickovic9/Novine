@@ -34,7 +34,10 @@ Route::post('/cms-journalist/create-post',[NewsController::class, 'createPost'])
 Route::get('/cms-journalist/delete/{article}',[JournalistController::class,'deletePost'])->middleware('journalist');
 Route::get('/cms-journalist/edit/{article}',[JournalistController::class,'showEditPost'])->middleware('journalist');
 Route::post('/cms-journalist/edit/{article}',[JournalistController::class,'editPost'])->middleware('journalist');
-
+Route::get('/cms-journalist/articles',[JournalistController::class,'showMyArticles'])->middleware('journalist');
+Route::get('/cms-journalist/article/{article}',[JournalistController::class,'showArticle'])->middleware('journalist');
+Route::get('/cms-journalist/article/{article}/request-delete',[JournalistController::class,'requestDelete']);
+Route::post('/cms-journalist/article/{article}/request-update',[JournalistController::class,'requestUpdate']);
 //urednik
 Route::get('/cms-editor',[EditorController::class,'showCMS'])->middleware('editor')->middleware('editor');
 Route::get('/cms-editor/drafts/{category}',[EditorController::class,'showDrafts'])->middleware('editor');

@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ArticleDeleteRequest;
+use App\Models\ArticleEditRequests;
 use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
+use function PHPUnit\Framework\isNull;
 
 class JournalistController extends Controller
 {
@@ -48,6 +52,54 @@ class JournalistController extends Controller
         else{
             return redirect('/cms-journalist/drafts')->with('success','Mozete izmeniti samo vase draftove!');
 
+        }
+    }
+    public function showMyArticles(){
+        $user_id = Auth::user()->id;
+        $articles= News::query()->where('user_id',"$user_id")->where('draft',0)->get();
+        return view('journalist.my-articles',['articles'=>$articles]);
+    }
+    public function articleCheck(News $article){
+        if(Auth::check()){
+            if(Auth::user()->id==$article->user_id){
+                return true;
+            }
+        }
+        else{
+            return redirect('/')->with('danger','Mozete upraljati samo vasim clancima');
+        }
+    }
+   public function showArticle(News $article){
+        if($this->articleCheck($article)){
+            $deleteRequestSent = !is_null($article->deleteRequest);
+            $updateRequestSent = !is_null($article->editRequest);
+            return view('journalist.article', [
+                'article' => $article,
+                'deleteRequestSent' => $deleteRequestSent,
+                'updateRequestSent' => $updateRequestSent,
+            ]);
+        }
+    }
+
+
+    public function requestDelete(News $article){
+        if($this->articleCheck($article)){
+            $field['article_id']=$article->id;
+            ArticleDeleteRequest::create($field);
+            return redirect('/cms-journalist/articles')->with('success','Uspesno ste poslali zahtev za brisanje clanka!');
+        }
+    }
+    public function requestUpdate(News $article,Request $request)
+    {
+        if($this->articleCheck($article)){
+            $fields = $request->validate([
+            'tekst' => 'required',
+            'naslov' => 'required',
+            'rubrika' => 'required',
+            ]);
+            $fields['article_id']=$article->id;
+            ArticleEditRequests::create($fields);
+            return redirect('/cms-journalist/articles')->with('success','Uspesno ste poslali zahtev za izmenu clanka!');
         }
     }
 }

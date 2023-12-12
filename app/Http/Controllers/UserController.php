@@ -44,7 +44,7 @@ class UserController extends Controller
         return redirect('/');
     }
     public function showHomePage(){
-        $news = News::all();
+        $news = News::query()->where('draft',0)->get();
         return view('home',['news' => $news]);
     }
 }
