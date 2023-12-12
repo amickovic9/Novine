@@ -20,21 +20,23 @@ class JournalistController extends Controller
         return view('journalist.create-post');
     }
     public function deletePost(News $article){
-        if($article->user_id == Auth::user()->id){
+        if($article->user_id == Auth::user()->id && $article->draft == 1){
             $article->delete();
             return redirect('/cms-journalist/drafts')->with('success','Uspesno ste izbrisali draft!');
         }
         else {
-            return redirect('/cms-journalist/drafts');
+             return redirect('/')->with('success','Mozete upravljati samo vasim draftovima!');
+
         }
     }
     public function showEditPost(News $article){
-        if($article->user_id == Auth::user()->id){
-        return view('journalist.edit-post',['article'=>$article]);
+        if($article->user_id == Auth::user()->id && $article->draft == 1){
+         return view('journalist.edit-post',['article'=>$article]);
         }
+        else return redirect('/')->with('success','Mozete upravljati samo vasim draftovima!');
     }
     public function editPost(News $article, Request $request){
-        if(Auth::user()->id == $article->user_id){
+        if(Auth::user()->id == $article->user_id && $article->draft == 1){
             $fields = $request->validate([
             'naslov' => 'required',
             'tekst' => 'required',

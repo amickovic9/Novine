@@ -94,20 +94,13 @@ class CMSController extends Controller
             $newCategories = [];
         }
 
+        // Detach categories that are not present in the new selection
         $categoriesToRemove = array_diff($userCategories, $newCategories);
-        $categoriesToAdd = array_diff($newCategories, $userCategories);
-        $categoriesToRemove = array_diff($userCategories, $newCategories);
-        $categoriesToAdd = array_diff($newCategories, $userCategories);
+        $user->categories()->detach($categoriesToRemove);
 
-        if (!empty($categoriesToRemove)) {
-            $user->categories()->detach($categoriesToRemove);
-        }
-
-        if (!empty($categoriesToAdd)) {
-            $user->categories()->sync($categoriesToAdd);
-        } elseif (empty($categoriesToAdd) && empty($newCategories)) {
-            $user->categories()->detach(); // Ukloni sve kategorije ako nisu izabrane nove
-        }
+        // Attach new categories that are not present in the user's categories
+        $categoriesToAdd = array_diff($newCategories, $userCategories);
+        $user->categories()->attach($categoriesToAdd);
 
         if ($user->role == 2) {
             return redirect('/cms/journalist')->with('success', 'Kategorije su uspešno ažurirane.');
@@ -115,6 +108,8 @@ class CMSController extends Controller
             return redirect('/cms/editors')->with('success', 'Kategorije su uspešno ažurirane.');
         }
     }
+
+
 
 
     public function showEditors(){

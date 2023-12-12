@@ -16,4 +16,7 @@ class Category extends Model
     {
         return $this->belongsToMany(User::class, 'users_categories', 'category_id', 'user_id')->withPivot('id');
     }
+    public function news(){
+        return $this->hasMany(News::class,'rubrika');
+    }
 }

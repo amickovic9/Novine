@@ -15,9 +15,10 @@ class News extends Model
         'rubrika',
     ];
     public function comments(){
-        return $this->hasMany(Comments::class,'article_id');
+        return $this->hasMany(Comment::class,'article_id');
     }
     public function user(){
         return $this->hasOne(User::class,'user_id');
     }
+    
 }

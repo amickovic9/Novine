@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CMSController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\EditorController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\JournalistController;
 
@@ -35,6 +36,16 @@ Route::get('/cms-journalist/edit/{article}',[JournalistController::class,'showEd
 Route::post('/cms-journalist/edit/{article}',[JournalistController::class,'editPost'])->middleware('journalist');
 
 //urednik
+Route::get('/cms-editor',[EditorController::class,'showCMS'])->middleware('editor')->middleware('editor');
+Route::get('/cms-editor/drafts/{category}',[EditorController::class,'showDrafts'])->middleware('editor');
+Route::get('/cms-editor/draft/{draft}',[EditorController::class,'showEditDraft'])->middleware('editor');
+Route::get('/cms-editor/draft/{draft}/allow',[EditorController::class,'allowDraft'])->middleware('editor');
+Route::get('/cms-editor/draft/{draft}/decline',[EditorController::class,'declineDraft'])->middleware('editor');
+Route::post('/cms-editor/draft/{draft}',[EditorController::class,'updateDraft'])->middleware('editor');
+Route::get('/cms-editor/articles/{category}',[EditorController::class,'showArticles'])->middleware('editor');
+Route::get('/cms-editor/article/{article}',[EditorController::class,'showPostedArticles'])->middleware('editor');
+Route::post('/cms-editor/article/{article}',[EditorController::class,'updateArticle'])->middleware('editor');
+Route::get('/cms-editor/article/{article}/draft',[EditorController::class,'hideArticle'])->middleware('editor');
 
 //cms
 Route::get('/cms',[CMSController::class,'showCMSScreen'])->middleware('cms');

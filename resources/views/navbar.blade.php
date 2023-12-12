@@ -43,6 +43,11 @@
         <a class="nav-link" href="/cms-journalist">CMS</a>
       </li>
       @endif
+      @if(Auth::check() && Auth::user()->role==3)
+      <li class="nav-item">
+        <a class="nav-link" href="/cms-editor">CMS</a>
+      </li>
+      @endif
       <li class="nav-item">
         <a class="nav-link" href="#">Kontakt</a>
       </li>
