@@ -85,8 +85,9 @@ class JournalistController extends Controller
     public function requestDelete(News $article){
         if($this->articleCheck($article)){
             $field['article_id']=$article->id;
+            $field['category_id']=$article->rubrika;
             ArticleDeleteRequest::create($field);
-            return redirect('/cms-journalist/articles')->with('success','Uspesno ste poslali zahtev za brisanje clanka!');
+            return redirect("/cms-journalist/article/{$article->id}")->with('success','Uspesno ste poslali zahtev za brisanje clanka!');
         }
     }
     public function requestUpdate(News $article,Request $request)
@@ -98,8 +99,10 @@ class JournalistController extends Controller
             'rubrika' => 'required',
             ]);
             $fields['article_id']=$article->id;
+            $fields['category_id']=$article->rubrika;
+
             ArticleEditRequests::create($fields);
-            return redirect('/cms-journalist/articles')->with('success','Uspesno ste poslali zahtev za izmenu clanka!');
+            return redirect("/cms-journalist/article/{$article->id}")->with('success','Uspesno ste poslali zahtev za izmenu clanka!');
         }
     }
 }

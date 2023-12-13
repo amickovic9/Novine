@@ -22,7 +22,7 @@ class News extends Model
     }
     public function deleteRequest()
     {
-        return $this->hasOne(ArticleDeleteRequest::class ,'article_id', 'id');
+        return $this->hasOne(ArticleDeleteRequest::class, 'article_id', 'id');
     }
     public function editRequest(){
         return $this->hasOne(ArticleEditRequests::class,'article_id','id');

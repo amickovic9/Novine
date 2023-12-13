@@ -16,6 +16,7 @@ class CreateArticleEditRequestsTable extends Migration
         Schema::create('article_edit_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('article_id');
+            $table->foreignId('category_id');
             $table->string('naslov');
             $table->string('tekst');
             $table->foreignId('rubrika');

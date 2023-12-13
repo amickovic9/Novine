@@ -16,6 +16,7 @@ class CreateArticleDeleteRequestsTable extends Migration
         Schema::create('article_delete_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('article_id');
+            $table->foreignId('category_id');
             $table->timestamps();
         });
     }

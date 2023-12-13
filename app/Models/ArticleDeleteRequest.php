@@ -9,11 +9,12 @@ class ArticleDeleteRequest extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'article_id'
+        'article_id',
+        'category_id',
     ];
     public function news()
         {
-            return $this->belongsTo(News::class, 'article_id', 'id');
+             return $this->belongsTo(News::class, 'article_id', 'id');
     }
 
 }

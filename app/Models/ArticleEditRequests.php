@@ -10,6 +10,7 @@ class ArticleEditRequests extends Model
     use HasFactory;
      protected $fillable = [
         'article_id',
+        'category_id',
         'naslov',
         'tekst',
         'rubrika',

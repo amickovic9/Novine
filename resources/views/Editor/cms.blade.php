@@ -11,13 +11,25 @@
     @include('navbar')
 
     <div class="container mt-4">
-        <h3>Upravljanje rubrikama:</h3>
+        <h3>Zahtevi za brisanje:</h3>
+        <span>{{$deleteRequests}}</span>
+        @if ($deleteRequests > 0)
+            <a href="/cms-editor/delete-requests" class="btn btn-primary">Vidi zahteve</a>
+        @endif
+        
+        <h3 class="mt-4">Zahtevi za izmenu:</h3>
+        <span>{{$updateRequests}}</span>
+        @if ($updateRequests > 0)
+            <a href="/cms-editor/edit-requests" class="btn btn-primary">Vidi zahteve</a>
+        @endif
+
+        <h3 class="mt-4">Upravljanje rubrikama:</h3>
         @foreach ($categories as $category)
             <div class="card mb-3">
                 <div class="card-body">
                     <h5 class="card-title">{{$category->category}}</h5>
-                    <a href="/cms-editor/drafts/{{$category->id}}" class="btn btn-sm btn-outline-primary mr-2">Draftovi</a>
-                    <a href="/cms-editor/articles/{{$category->id}}" class="btn btn-sm btn-outline-primary">Članci</a>
+                    <a href="/cms-editor/drafts/{{$category->id}}" class="btn btn-outline-primary mr-2">Draftovi</a>
+                    <a href="/cms-editor/articles/{{$category->id}}" class="btn btn-outline-primary">Članci</a>
                 </div>
             </div>
         @endforeach

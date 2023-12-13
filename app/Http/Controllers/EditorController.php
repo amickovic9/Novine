@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ArticleDeleteRequest;
+use App\Models\ArticleEditRequests;
 use App\Models\News;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -10,9 +12,19 @@ use Illuminate\Support\Facades\Auth;
 class EditorController extends Controller
 {
     public function showCMS(){
-        $categories = Auth::user()->categories;
-        return view('editor.cms',['categories'=>$categories]);
+        $user = Auth::user();
+        $categories = $user->categories;
+        $categoryIds = $categories->pluck('id')->toArray();
+        $updateRequest = ArticleEditRequests::whereIn('category_id',$categoryIds)->count();
+        $deleteRequestsCount = ArticleDeleteRequest::whereIn('category_id', $categoryIds)->count();
+
+        return view('editor.cms', [
+            'categories' => $categories,
+            'deleteRequests' => $deleteRequestsCount,
+            'updateRequests' => $updateRequest,
+        ]);
     }
+
     public function showDrafts(Category $category){
         $drafts = $category->news()->where('draft',1)->get();
         return view('editor.drafts',['drafts'=>$drafts,'category'=>$category]);
@@ -92,6 +104,67 @@ class EditorController extends Controller
         }
         else return redirect('/')->with('danger','Mozete upravljati samo vasim rubrikama!');
     }
-    
+    public function showDeleteRequests(){
+        $user = Auth::user();
+        $categoryIds=$user->categories()->pluck('categories.id')->toArray();
+        $deleteRequests = ArticleDeleteRequest::whereIn('category_id',$categoryIds)->get();
+        return view('editor.delete-requests',['deleteRequests' => $deleteRequests]);
+    }
+    public function articleCheck(News $article){
+        if(Auth::check()){
+            $categories = Auth::user()->categories()->pluck('categories.id')->toArray();
+            if(in_array($article->rubrika,$categories)){
+                return true;
+            }
+        }
+        else{
+            return redirect('/')->with('danger','Mozete upraljati samo vasim rubrikama');
+        }
+        return false;
+    }
+    public function allowDeleteRequest(ArticleDeleteRequest $deleteRequest){
+        $article = $deleteRequest->news;
+
+        if($this->articleCheck($article)){
+            $articleEdit = $article->editRequest();
+            if($articleEdit){
+                $articleEdit->delete();
+            }
+            $article->delete();   
+            $deleteRequest->delete();
+            return back()->with('success','Uspešno ste odobrili brisanje članka!');
+        }
+    }
+    public function declineDeleteRequest(ArticleDeleteRequest $deleteRequest){
+        $article = $deleteRequest->news;
+        if($this->articleCheck($article)){
+            $deleteRequest->delete();
+            return back()->with('success','Uspešno ste odbili brisanje članka!');
+
+        }
+    }
+    public function showEditRequests(){
+        $user = Auth::user();
+        $categoryIds=$user->categories()->pluck('categories.id')->toArray();
+        $editRequests = ArticleEditRequests::whereIn('category_id',$categoryIds)->get();
+        return view('editor.edit-requests',['editRequests' => $editRequests]);
+    }
+
+    public function allowEdit(ArticleEditRequests $editRequest){
+        $article = $editRequest->news;
+        if($this->articleCheck($article)){
+            $article->update($editRequest->toArray());
+            $editRequest->delete();
+            return back()->with('Uspesno ste odobrili izmenu clanka!');
+        }
+    }
+    public function declineEdit(ArticleEditRequests $editRequest){
+        $article = $editRequest->news;
+        if($this->articleCheck($article)){
+            $editRequest->delete();
+            return back()->with('success','Uspesno ste odbili izmenu clanka!');
+        }
+    }
 
 }
+
