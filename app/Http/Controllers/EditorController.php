@@ -97,9 +97,15 @@ class EditorController extends Controller
         }
     }
     public function hideArticle(News $article){
-        if(in_array($article->rubrika,Auth::user()->categories()->pluck('categories.id')->toArray())){
+        if($this->articleCheck($article)){
             $article['draft'] = 1;
             $article->update();
+            if($article->editRequest()){
+                $article->editRequest->delete();
+            }
+            if($article->deleteRequest()){
+                $article->deleteRequest->delete();
+            }
             return redirect("/cms-editor/articles/{$article->rubrika}")->with('success','Uspesno ste prebacili clanak u draftove');
         }
         else return redirect('/')->with('danger','Mozete upravljati samo vasim rubrikama!');

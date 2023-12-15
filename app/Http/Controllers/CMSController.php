@@ -14,7 +14,8 @@ class CMSController extends Controller
         return view('cms.cms');
     }
     public function showCreatePostScreen(){
-        return view('cms.create-post');
+        $categories= Category::all();
+        return view('cms.create-post',['categories'=>$categories]);
     }
     public function showUsers(){
         $users = User::all();
@@ -94,11 +95,9 @@ class CMSController extends Controller
             $newCategories = [];
         }
 
-        // Detach categories that are not present in the new selection
         $categoriesToRemove = array_diff($userCategories, $newCategories);
         $user->categories()->detach($categoriesToRemove);
 
-        // Attach new categories that are not present in the user's categories
         $categoriesToAdd = array_diff($newCategories, $userCategories);
         $user->categories()->attach($categoriesToAdd);
 
@@ -108,10 +107,6 @@ class CMSController extends Controller
             return redirect('/cms/editors')->with('success', 'Kategorije su uspešno ažurirane.');
         }
     }
-
-
-
-
     public function showEditors(){
         $editors = User::query()
             ->where('role', 'like', '3')

@@ -27,5 +27,11 @@ class News extends Model
     public function editRequest(){
         return $this->hasOne(ArticleEditRequests::class,'article_id','id');
     }
+    public function category(){
+        return $this->hasOne(Category::class, 'id','rubrika');
+    }
+    public function tags(){
+        return $this->belongsToMany(Tag::class,'news_tags');
+    }
     
 }

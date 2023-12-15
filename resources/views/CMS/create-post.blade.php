@@ -14,11 +14,23 @@
 <div class="container mt-4">
     <form action="/cms/create-post" method="POST">
         @csrf 
-        <input type="text" name="naslov" required placeholder="Naslov članka" class="form-control mb-2"> 
-        <textarea name="tekst" required placeholder="Tekst članka" class="form-control mb-2"></textarea> 
-        <input type="text" name="rubrika" required placeholder="Rubrika" class="form-control mb-2">   
-        
-        <button type="submit" class="btn btn-primary mt-2">Kreiraj objavu</button> 
+        <div class="form-group">
+            <input type="text" name="naslov" required placeholder="Naslov članka" class="form-control"> 
+        </div>
+        <div class="form-group">
+            <textarea name="tekst" required placeholder="Tekst članka" class="form-control" rows="6"></textarea>
+        </div>
+        <div class="form-group">
+            <select name="rubrika" class="form-control">
+                @foreach ($categories as $category)
+                    <option value="{{$category->id}}">{{$category->category}}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="text" name="tagovi" id="tagovi" class="form-control" placeholder="Tagovi">
+        </div>
+        <button type="submit" class="btn btn-primary">Kreiraj objavu</button> 
     </form>
 </div>
 

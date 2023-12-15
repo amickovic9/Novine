@@ -13,26 +13,34 @@
         <form action="/cms-journalist/article/{{$article->id}}/request-update" method="post">
             @csrf
             <div class="form-group">
+                <label for="naslov">Naslov artikla</label>
                 <input type="text" class="form-control" id="naslov" name="naslov" value="{{ $article->naslov }}">
             </div>
             <div class="form-group">
+                <label for="tekst">Tekst artikla</label>
                 <textarea class="form-control" id="tekst" name="tekst" rows="6">{{ $article->tekst }}</textarea>
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" id="rubrika" name="rubrika" value="{{ $article->rubrika }}">
+                <label for="rubrika">Rubrika</label>
+                <select name="rubrika" class="form-control">
+                    @foreach ($categories as $category)
+                        <option value="{{$category->id}}" @if ($category->id == $article->rubrika) selected @endif>
+                            {{$category->category}}
+                        </option>
+                    @endforeach
+                </select>
             </div>
             @if ($updateRequestSent)
-            Zahtev za izmenu je poslat! 
+                <p>Zahtev za izmenu je već poslat!</p>
             @else
-             <button type="submit" class="btn btn-primary">Podnesi zahtev za izmenu</button>   
+                <button type="submit" class="btn btn-primary">Podnesi zahtev za izmenu</button>   
             @endif
-            
         </form>
+        
         @if ($deleteRequestSent)
-        Zahtev za brisanje je poslat!
+            <p>Zahtev za brisanje je već poslat!</p>
         @else  
-        <a href="/cms-journalist/article/{{$article->id}}/request-delete" class="mt-3 btn btn-danger">Podnesi zahtev za brisanje</a>
-
+            <a href="/cms-journalist/article/{{$article->id}}/request-delete" class="mt-3 btn btn-danger">Podnesi zahtev za brisanje</a>
         @endif
     </div>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>

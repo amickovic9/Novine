@@ -21,7 +21,8 @@ class JournalistController extends Controller
         return view('journalist.drafts',['drafts' =>$drafts ]);
     }
     public function showCreatePost(){
-        return view('journalist.create-post');
+        $categories = Auth::user()->categories;
+        return view('journalist.create-post',['categories'=>$categories]);
     }
     public function deletePost(News $article){
         if($article->user_id == Auth::user()->id && $article->draft == 1){
@@ -34,8 +35,9 @@ class JournalistController extends Controller
         }
     }
     public function showEditPost(News $article){
+        $categories = Auth::user()->categories;
         if($article->user_id == Auth::user()->id && $article->draft == 1){
-         return view('journalist.edit-post',['article'=>$article]);
+         return view('journalist.edit-post',['article'=>$article,'categories'=>$categories]);
         }
         else return redirect('/')->with('success','Mozete upravljati samo vasim draftovima!');
     }
@@ -71,12 +73,14 @@ class JournalistController extends Controller
     }
    public function showArticle(News $article){
         if($this->articleCheck($article)){
+            $categories = Auth::user()->categories;
             $deleteRequestSent = !is_null($article->deleteRequest);
             $updateRequestSent = !is_null($article->editRequest);
             return view('journalist.article', [
                 'article' => $article,
                 'deleteRequestSent' => $deleteRequestSent,
                 'updateRequestSent' => $updateRequestSent,
+                'categories' => $categories,
             ]);
         }
     }

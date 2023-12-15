@@ -25,6 +25,8 @@ Route::post('/login',[UserController::class,'loginUser']);
 Route::post('/register',[UserController::class,'registerUser']);
 Route::get('/logout',[UserController::class,'logoutUser']);
 Route::get('/article/{article}',[NewsController::class,'showArticle']);
+Route::get('/article/{article}/like',[NewsController::class,'like']);
+Route::get('/article/{article}/dislike',[NewsController::class,'dislike']);
 Route::post('/add-comment',[CommentController::class,'addComment']);
 //novinar
 Route::get('/cms-journalist',[JournalistController::class,'showCMS'])->middleware('journalist');

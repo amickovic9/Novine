@@ -12,8 +12,13 @@
     <div class="container mt-4">
         <h1>{{$article['naslov']}}</h1>
         <p>{{$article['tekst']}}</p>
-        <p>Iz rubrike: {{$article['rubrika']}}</p>
-
+        <p>Iz rubrike: {{$article->category->category}}</p>
+        @if ($liked)
+            <a href="/article/{{$article->id}}/dislike">Ne svidja mi se</a>
+        @else
+            <a href="/article/{{$article->id}}/like">Svidja mi se</a>
+        @endif
+        
         <h1 class="mt-4">Komentari</h1>
         <form action="/add-comment" method="post" class="mt-3">
             @csrf

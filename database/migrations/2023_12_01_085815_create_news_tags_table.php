@@ -13,9 +13,9 @@ class CreateNewsTaggsTable extends Migration
      */
     public function up()
     {
-        Schema::create('news_taggs', function (Blueprint $table) {
+        Schema::create('news_tags', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('news_id');
             $table->foreignId('tag_id');
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ class CreateNewsTaggsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('news_taggs');
+        Schema::dropIfExists('news_tags');
     }
 }

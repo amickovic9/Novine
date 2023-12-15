@@ -14,10 +14,25 @@
 <div class="container mt-4">
     <form action="/cms-journalist/create-post" method="POST">
         @csrf 
-        <input type="text" name="naslov" required placeholder="Naslov članka" class="form-control mb-2"> 
-        <textarea name="tekst" required placeholder="Tekst članka" class="form-control mb-2"></textarea> 
-        <input type="text" name="rubrika" required placeholder="Rubrika" class="form-control mb-2">   
-        
+        <div class="form-group">
+            <label for="naslov">Naslov članka</label>
+            <input type="text" name="naslov" required class="form-control" id="naslov"> 
+        </div>
+        <div class="form-group">
+            <label for="tekst">Tekst članka</label>
+            <textarea name="tekst" required class="form-control" id="tekst"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="rubrika">Odaberi rubriku</label>
+            <select name="rubrika" class="form-control" id="rubrika">
+                @foreach ($categories as $category)
+                    <option value="{{$category->id}}">{{$category->category}}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="text" name="tagovi" id="tagovi" class="form-control" placeholder="Tagovi">
+        </div>
         <button type="submit" class="btn btn-primary mt-2">Kreiraj objavu</button> 
     </form>
 </div>

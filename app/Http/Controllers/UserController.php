@@ -43,8 +43,24 @@ class UserController extends Controller
         Auth::logout();
         return redirect('/');
     }
-    public function showHomePage(){
-        $news = News::query()->where('draft',0)->get();
+    public function showHomePage(Request $request){
+        
+        $query = News::query()->where('draft',0);
+        if($request->filled('naslov')){
+        $query->where('naslov', 'like','%' . $request['naslov'].'%');
+        }
+        if($request->filled('datum'))
+        {
+            $query->whereDate('created_at', $request['datum']);
+        }
+        if($request->filled('tagovi')) {
+            $tagovi = explode(' ', $request->input('tagovi'));
+            
+            $query->whereHas('tags', function ($q) use ($tagovi) {
+                $q->whereIn('name', $tagovi);
+            });
+        }
+        $news = $query->get();
         return view('home',['news' => $news]);
     }
 }
