@@ -12,8 +12,25 @@
 
 <div class="container mt-4">
     <h1>Upravljanje Korisnicima</h1>
-    <table class="table">
-        <thead>
+    <form action="">
+        <div class="form-row">
+            <div class="col-md-4 mb-3">
+                <label for="inputName">Ime:</label>
+                <input type="text" class="form-control" id="inputName" name="name" value="{{ request()->input('name') }}">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputEmail">Email:</label>
+                <input type="text" class="form-control" id="inputEmail" name="email" value="{{ request()->input('email') }}">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputRole">Role:</label>
+                <input type="text" class="form-control" id="inputRole" name="role" value="{{ request()->input('role') }}">
+            </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Pretrazi</button>
+    </form>
+    <table class="table mt-4">
+        <thead >
             <tr>
                 <th>Ime</th>
                 <th>Email</th>
@@ -29,7 +46,7 @@
                 <td>{{$user['role']}}</td>
                 <td>
                     <a href="/cms/edit-user/{{$user['id']}}" class="btn btn-secondary">Izmeni</a>
-                    <a href="/cms/delete-user/{{$user['id']}}" class="btn btn-danger">Izbrisi</a>
+                    <a href="/cms/delete-user/{{$user['id']}}" class="btn btn-danger">Izbriši</a>
                 </td>
             </tr>
             @endforeach

@@ -25,6 +25,10 @@
                 <label for="rubrika">Rubrika</label>
                 <input type="text" class="form-control" name="rubrika" id="rubrika" value="{{$draft->rubrika}}">
             </div>
+            <div class="form-group">
+                <label for="tag">Taggovi članka</label>
+                <textarea class="form-control" id="tags" name="tags" rows="5">@foreach($draft->tags as $tag){{$tag->name}} @endforeach</textarea>
+            </div>
             <button type="submit" class="btn btn-primary">Sačuvaj</button>
         </form>
         <div class="mt-3">

@@ -16,12 +16,10 @@ class CMS
      */
     public function handle(Request $request, Closure $next)
     {
-        {
         if (auth()->check() && auth()->user()->role == 4) {
             return $next($request);
         }
 
         abort(403, 'Nemate dozvolu da pristupite ovoj stranici.');
-    }
     }
 }

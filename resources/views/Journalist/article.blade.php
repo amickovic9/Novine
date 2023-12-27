@@ -18,7 +18,11 @@
             </div>
             <div class="form-group">
                 <label for="tekst">Tekst artikla</label>
-                <textarea class="form-control" id="tekst" name="tekst" rows="6">{{ $article->tekst }}</textarea>
+                <textarea class="form-control" id="tekst" name="tekst" rows="6">{{ $article->tekst   }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="tekst">Tagovi artikla</label>
+                <textarea class="form-control" id="tekst" name="tags" rows="6">@foreach($tags as $tag){{$tag }} @endforeach</textarea>
             </div>
             <div class="form-group">
                 <label for="rubrika">Rubrika</label>

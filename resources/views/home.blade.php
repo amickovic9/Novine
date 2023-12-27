@@ -26,6 +26,16 @@
                     <label for="datum">Datum</label>
                     <input type="date" class="form-control" name="datum" id="datum" value="{{request()->input('datum')}}">
                 </div>
+                <div>
+                    <select name="rubrika" id="">
+                        <option value="">Izaberi</option>
+                        @foreach ($categories as $category)
+                            <option value="{{$category->id}}" @if ($category->id == request()->input('rubrika'))
+                                selected
+                            @endif>{{$category->category}}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary">Pretraži</button>
         </form>

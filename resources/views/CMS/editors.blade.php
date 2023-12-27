@@ -11,6 +11,10 @@
     @include('navbar')
     <div class="container mt-4">
         <h1>Upravljanje urednicima</h1>
+        <form class="form-inline mb-4">
+            <input type="text" class="form-control mr-2" name='name' placeholder="Pretraži po imenu" value={{request()->input('name')}}>
+            <input type="submit" value="Pretraži" class="btn btn-primary">
+        </form>
         @foreach ($editors as $editor)
             <div class="card mb-4">
                 <div class="card-body">

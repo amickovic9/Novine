@@ -11,7 +11,11 @@
     @include('navbar')
     <div class="container mt-4">
         <h1>Upravljanje rubrikom: {{ $category->category }} - draftovi</h1>
-
+        <form action="">
+            @csrf
+            <input type="text">
+            <button type="submit">Pretrazi</button>
+        </form>
         <div class="list-group mt-4">
             @foreach ($drafts as $draft)
                 <a href="/cms-editor/draft/{{$draft->id}}" class="list-group-item list-group-item-action">

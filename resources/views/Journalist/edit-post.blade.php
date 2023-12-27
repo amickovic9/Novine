@@ -22,6 +22,10 @@
                 <textarea class="form-control" id="tekst" name="tekst" rows="5">{{$article->tekst}}</textarea>
             </div>
             <div class="form-group">
+                <label for="tag">Taggovi članka</label>
+                <textarea class="form-control" id="tag" name="tag" >@foreach($article->tags as $tag){{$tag->name }} @endforeach</textarea>
+            </div>
+            <div class="form-group">
                 <label for="rubrika">Odaberi rubriku</label>
                 <select name="rubrika" class="form-control">
                     @foreach ($categories as $category)

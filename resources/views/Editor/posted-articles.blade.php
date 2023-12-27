@@ -10,7 +10,7 @@
 <body>
     @include('navbar')
     <div class="container mt-4">
-        <h1>Upravljanje draftom</h1>
+        <h1>Upravljanje artiklima</h1>
         <form action='' method='post' class="mt-3">
             @csrf
             <div class="form-group">
@@ -20,6 +20,10 @@
             <div class="form-group">
                 <label for="tekst">Tekst</label>
                 <input type="text" class="form-control" name="tekst" id="tekst" value="{{$article->tekst}}">
+            </div>
+            <div class="form-group">
+                <label for="tekst">Tagovi</label>
+                <textarea type="text" class="form-control" name="tags" id="tekst" >@foreach ($article->tags as $tag ){{$tag->name}} @endforeach</textarea>
             </div>
             <div class="form-group">
                 <label for="rubrika">Rubrika</label>

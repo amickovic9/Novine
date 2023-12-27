@@ -28,6 +28,22 @@
 
     <hr>
 
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Pretraži Rubrike</h2>
+            <form action="">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="name" placeholder="Naziv rubrike" value="{{ request()->input('name') }}">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Pretraži</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <hr>
+
     <h1>Rubrike</h1>
     <div class="row">
         @foreach ($categories as $category)
@@ -35,16 +51,16 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Naziv rubrike:</h5>
-                    <form action="/cms/edit-category/{{$category['id']}}" method="POST">
+                    <form action="/cms/edit-category/{{ $category['id'] }}" method="POST">
                         @csrf
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" value="{{$category['category']}}" name='nameOfCategory'>
+                            <input type="text" class="form-control" value="{{ $category['category'] }}" name="nameOfCategory">
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="submit">Izmeni naziv</button>
                             </div>
                         </div>
                     </form>
-                    <a href="/cms/delete-category/{{$category['id']}}" class="btn btn-danger">Izbrisi rubriku</a>
+                    <a href="/cms/delete-category/{{ $category['id'] }}" class="btn btn-danger">Izbriši rubriku</a>
                 </div>
             </div>
         </div>

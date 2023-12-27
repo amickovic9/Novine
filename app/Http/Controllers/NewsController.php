@@ -12,47 +12,49 @@ use function PHPUnit\Framework\isEmpty;
 
 class NewsController extends Controller
 {
-    public function createPost(Request $request){
-            $fields = $request->validate([
-        'naslov' => 'required',
-        'tekst' => 'required',
-        'rubrika' => 'required',
-        'tagovi' => 'required'
-    ]);
+    public function createPost(Request $request)
+    {
+        $fields = $request->validate([
+            'naslov' => 'required',
+            'tekst' => 'required',
+            'rubrika' => 'required',
+            'tagovi' => 'required'
+        ]);
 
-    $fields['user_id'] = Auth::user()->id;
-    $draft = News::create($fields);
+        $fields['user_id'] = Auth::user()->id;
+        $draft = News::create($fields);
 
-    $tagNames = explode(' ', $fields['tagovi']);
+        $tagNames = explode(' ', $fields['tagovi']);
 
-    // Kreiranje i sinhronizacija tagova
-    $tagIDs = [];
-    foreach ($tagNames as $tagName) {
-        $tag = Tag::firstOrCreate(['name' => $tagName]);
-        $tagIDs[] = $tag->id; 
+        $tagIDs = [];
+        foreach ($tagNames as $tagName) {
+            $tag = Tag::firstOrCreate(['name' => $tagName]);
+            $tagIDs[] = $tag->id;
+        }
+
+        $draft->tags()->sync($tagIDs);
+
+        if (Auth::user()->role == 4) {
+            return redirect('/cms')->with('success', 'Uspesno ste kreirali clanak');
+        } else if (Auth::user()->role == 2) {
+            return redirect('/cms-journalist/drafts')->with('success', 'Uspesno ste kreirali clanak');
+        }
     }
 
-    $draft->tags()->sync($tagIDs);
-
-    if(Auth::user()->role == 4){
-        return redirect('/cms')->with('success','Uspesno ste kreirali clanak');
-    } else if(Auth::user()->role == 2){
-        return redirect('/cms-journalist/drafts')->with('success','Uspesno ste kreirali clanak');
-    }
-}
-
-    public function checkArticle(News $article){
-        if($article->draft == 0){
+    public function checkArticle(News $article)
+    {
+        if ($article->draft == 0) {
             return true;
         }
         return redirect('/');
     }
-    public function showArticle(News $article){
-        if($this->checkArticle($article)){
+    public function showArticle(News $article)
+    {
+        if ($this->checkArticle($article)) {
             $address = request()->ip();
             $like = Likes::where('ip_address', $address)
-                        ->where('article_id', $article->id)
-                        ->first();
+                ->where('article_id', $article->id)
+                ->first();
 
             if ($like) {
                 $liked = true;
@@ -60,7 +62,7 @@ class NewsController extends Controller
                 $liked = false;
             }
 
-            
+
 
             $comments = $article->comments()->get();
             return view('article', [
@@ -73,13 +75,14 @@ class NewsController extends Controller
 
 
 
-    public function like(News $article){
+    public function like(News $article)
+    {
         if ($this->checkArticle($article)) {
             $address = request()->ip();
 
             $existingLike = Likes::where('ip_address', $address)
-                                ->where('article_id', $article->id)
-                                ->first();
+                ->where('article_id', $article->id)
+                ->first();
 
             if (!$existingLike) {
                 $fields['ip_address'] = $address;
@@ -90,15 +93,15 @@ class NewsController extends Controller
         return back();
     }
 
-    public function dislike(News $article){
-        if($this->checkArticle($article)){
+    public function dislike(News $article)
+    {
+        if ($this->checkArticle($article)) {
             $ip = request()->ip();
-            $existingLike = Likes::where('article_id',$article->id)->where('ip_address',$ip)->first();
-            if($existingLike){
+            $existingLike = Likes::where('article_id', $article->id)->where('ip_address', $ip)->first();
+            if ($existingLike) {
                 $existingLike->delete();
             }
             return back();
         }
     }
-   
 }
