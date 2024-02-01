@@ -45,12 +45,12 @@ Route::post('/cms-journalist/article/{article}/request-update', [JournalistContr
 Route::get('/cms-editor', [EditorController::class, 'showCMS'])->middleware('editor')->middleware('editor');
 Route::get('/cms-editor/drafts/{category}', [EditorController::class, 'showDrafts'])->middleware('editor');
 Route::get('/cms-editor/draft/{draft}', [EditorController::class, 'showEditDraft'])->middleware('editor');
+Route::get('/cms-editor/delete/{article}', [EditorController::class, 'deleteAr'])->middleware('editor');
 Route::get('/cms-editor/draft/{draft}/allow', [EditorController::class, 'allowDraft'])->middleware('editor');
 Route::get('/cms-editor/draft/{draft}/decline', [EditorController::class, 'declineDraft'])->middleware('editor');
 Route::post('/cms-editor/draft/{draft}', [EditorController::class, 'updateDraft'])->middleware('editor');
-Route::get('/cms-editor/articles/{category}', [EditorController::class, 'showArticles'])->middleware('editor');
 Route::get('/cms-editor/article/{article}', [EditorController::class, 'showPostedArticles'])->middleware('editor');
-Route::post('/cms-editor/article/{article}', [EditorController::class, 'updateArticle'])->middleware('editor');
+Route::post('/cms-editor/article/{draft}', [EditorController::class, 'updateDraft'])->middleware('editor');
 Route::get('/cms-editor/article/{article}/draft', [EditorController::class, 'hideArticle'])->middleware('editor');
 Route::get('/cms-editor/delete-requests', [EditorController::class, 'showDeleteRequests'])->middleware('editor');
 Route::get('/cms-editor/delete-request/{deleteRequest}/allow', [EditorController::class, 'allowDeleteRequest'])->middleware('editor');
@@ -58,8 +58,12 @@ Route::get('/cms-editor/delete-request/{deleteRequest}/decline', [EditorControll
 Route::get('/cms-editor/edit-requests', [EditorController::class, 'showEditRequests'])->middleware('editor');
 Route::get('/cms-editor/edit-request/{editRequest}/allow', [EditorController::class, 'allowEdit'])->middleware('editor');
 Route::get('/cms-editor/edit-request/{editRequest}/decline', [EditorController::class, 'declineEdit'])->middleware('editor');
-//dodati za odbijanje zahteva za brisanje, da ako se pirhvati zahtev da se brise i ukoliko postoji u edit reqst i zavrisiti za izmenu
+Route::post('/cms-editor/{user}/categories-update', [EditorController::class, 'updateCategories'])->middleware('editor');
+Route::get('/cms-editor/create', [EditorController::class, 'showCreate'])->middleware('editor');
+Route::post('/cms-editor/create', [NewsController::class, 'createPost'])->middleware('editor');
+
 //cms
+
 Route::get('/cms', [CMSController::class, 'showCMSScreen'])->middleware('cms');
 Route::get('/cms/create-post', [CMSController::class, 'showCreatePostScreen'])->middleware('cms');
 Route::post('/cms/create-post', [NewsController::class, 'createPost'])->middleware('cms');

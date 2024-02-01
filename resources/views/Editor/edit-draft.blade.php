@@ -39,7 +39,7 @@
         </form>
         <div class="mt-3">
             <a href="/cms-editor/draft/{{$draft->id}}/allow" class="btn btn-success">Dozvoli</a>
-            <a href="/cms-editor/draft/{{$draft->id}}/decline" class="btn btn-danger">Odbij</a>
+            <a href="/cms-editor/draft/{{$draft->id}}/decline" class="btn btn-danger">Izbrisi</a>
         </div>
     </div>
 

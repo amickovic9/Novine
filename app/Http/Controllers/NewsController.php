@@ -45,6 +45,8 @@ class NewsController extends Controller
             return redirect('/cms')->with('success', 'Uspesno ste kreirali clanak');
         } else if (Auth::user()->role == 2) {
             return redirect('/cms-journalist/drafts')->with('success', 'Uspesno ste kreirali clanak');
+        } else if (Auth::user()->role == 3) {
+            return redirect('/cms-editor')->with('success', 'Uspesno ste kreirali clanak');
         }
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tag;
 use App\Models\News;
+use App\Models\User;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\ArticleEditRequests;
@@ -46,6 +47,11 @@ class EditorController extends Controller
         }
         $article->delete();
     }
+    public function deleteAr(News $article)
+    {
+        $this->deleteArticle($article);
+        return redirect('/cms-editor')->with('success', 'Uspesno ste izbrisali objavu');
+    }
     public function showCMS()
     {
         $user = Auth::user();
@@ -53,11 +59,19 @@ class EditorController extends Controller
         $categoryIds = $categories->pluck('id')->toArray();
         $updateRequest = ArticleEditRequests::whereIn('category_id', $categoryIds)->count();
         $deleteRequestsCount = ArticleDeleteRequest::whereIn('category_id', $categoryIds)->count();
-
+        $articles = News::whereIn('rubrika', $categoryIds)->get();
+        $journalists = User::where('role', 2)->get();
+        foreach ($journalists as $journalist) {
+            $journalistCategories = $journalist->categories;
+            $journalistCategoryIds = $journalistCategories->pluck('id')->toArray();
+            $journalist['categoryIds'] = $journalistCategoryIds;
+        }
         return view('editor.cms', [
             'categories' => $categories,
+            'articles' => $articles,
             'deleteRequests' => $deleteRequestsCount,
             'updateRequests' => $updateRequest,
+            'journalists' => $journalists,
         ]);
     }
 
@@ -79,7 +93,7 @@ class EditorController extends Controller
         if (in_array($draft->rubrika, Auth::user()->categories()->pluck('categories.id')->toArray())) {
             $draft['draft'] = 0;
             $draft->update();
-            return redirect("cms-editor/drafts/{$draft->rubrika}")->with('success', 'Uspesno ste odobrili clanak');
+            return redirect("/cms-editor")->with('success', 'Uspesno ste odobrili clanak');
         } else {
             return redirect('/')->with('success', 'Mozete upravljati samo vasom rubrikom!');
         }
@@ -89,14 +103,14 @@ class EditorController extends Controller
         if (in_array($draft->rubrika, Auth::user()->categories()->pluck('categories.id')->toArray()) && $draft->draft == 1) {
             $this->deleteArticle($draft);
 
-            return redirect("cms-editor/drafts/{$draft->rubrika}")->with('success', 'Uspesno ste odbili clanak');
+            return redirect("/cms-editor")->with('success', 'Uspesno ste odbili clanak');
         } else {
             return redirect('/')->with('success', 'Mozete upravljati samo vasom rubrikom');
         }
     }
     public function updateDraft(News $draft, Request $request)
     {
-        if (in_array($draft->rubrika, Auth::user()->categories()->pluck('categories.id')->toArray()) && $draft->draft == 1) {
+        if (in_array($draft->rubrika, Auth::user()->categories()->pluck('categories.id')->toArray())) {
             $fields = $request->validate([
                 'tekst' => 'required',
                 'naslovna' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -129,61 +143,18 @@ class EditorController extends Controller
                 $tagIDs[] = $tag->id;
             }
             $draft->tags()->sync($tagIDs);
-            return redirect("cms-editor/drafts/{$draft->rubrika}")->with('success', 'Uspesno ste izmenili draft!');
+            return redirect("cms-editor")->with('success', 'Uspesno ste izmenili objavu!');
         } else {
-            return redirect('/')->with('danger', 'Mozete upravljati samo vasom rubrikom');
+            return redirect('/')->with('danger', 'Mozete upravljati samo vasom ruuuuubrikom');
         }
     }
 
-    public function showArticles(Category $category)
-    {
-        $articles = $category->news()->where('draft', 0)->get();
-        return view('editor.articles', ['articles' => $articles, 'category' => $category]);
-    }
+
     public function showPostedArticles(News $article)
     {
         if (in_array($article->rubrika, Auth::user()->categories()->pluck('categories.id')->toArray()) && $article->draft == 0) {
             return view('editor.posted-articles', ['article' => $article]);
         } else  return redirect('/')->with('danger', 'Mozete upravljati samo vasom rubrikom');
-    }
-    public function updateArticle(News $article, Request $request)
-    {
-        if (in_array($article->rubrika, Auth::user()->categories()->pluck('categories.id')->toArray())) {
-            $fields = $request->validate([
-                'tekst' => 'required',
-                'naslovna' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-                'naslov' => 'required',
-                'rubrika' => 'required',
-                'tags' => 'required'
-            ]);
-            if ($request->hasFile('naslovna')) {
-                $oldImagePath = storage_path('app/public/naslovne/' . $article->naslovna);
-
-                Storage::delete('naslovne/' . $article->naslovna);
-
-                if (Storage::missing('naslovne/' . $article->naslovna) && File::exists($oldImagePath)) {
-                    File::delete($oldImagePath);
-                }
-
-                $naslovna = $request->file('naslovna');
-                $naslovnaIme = time() . '.' . $naslovna->getClientOriginalExtension();
-                $naslovna->storeAs('public/naslovne', $naslovnaIme);
-                $fields['naslovna'] = $naslovnaIme;
-            }
-            $article->update($fields);
-            $article->tags()->detach();
-            $tagNames = explode(' ', $fields['tags']);
-
-            $tagIDs = [];
-            foreach ($tagNames as $tagName) {
-                $tag = Tag::firstOrCreate(['name' => $tagName]);
-                $tagIDs[] = $tag->id;
-            }
-            $article->tags()->sync($tagIDs);
-            return redirect("cms-editor/articles/{$article->rubrika}")->with('success', 'Uspesno ste izmenili clanak!');
-        } else {
-            return redirect('/')->with('danger', 'Mozete upravljati samo vasom rubrikom');
-        }
     }
     public function hideArticle(News $article)
     {
@@ -196,7 +167,7 @@ class EditorController extends Controller
             if ($article->deleteRequest()->exists()) {
                 $article->deleteRequest->delete();
             }
-            return redirect("/cms-editor/articles/{$article->rubrika}")->with('success', 'Uspesno ste prebacili clanak u draftove');
+            return redirect("/cms-editor")->with('success', 'Uspesno ste prebacili clanak u draftove');
         } else return redirect('/')->with('danger', 'Mozete upravljati samo vasim rubrikama!');
     }
     public function showDeleteRequests()
@@ -282,5 +253,28 @@ class EditorController extends Controller
             $editRequest->delete();
             return back()->with('success', 'Uspesno ste odbili izmenu clanka!');
         }
+    }
+    public function updateCategories(User $user, Request $request)
+    {
+        $userCategories = $user->categories()->pluck('categories.id')->toArray();
+        $newCategories = $request->input('categories');
+
+        if (!is_array($newCategories)) {
+            $newCategories = [];
+        }
+
+        $categoriesToRemove = array_diff($userCategories, $newCategories);
+        $user->categories()->detach($categoriesToRemove);
+
+        $categoriesToAdd = array_diff($newCategories, $userCategories);
+        $user->categories()->attach($categoriesToAdd);
+        return redirect('/cms-editor')->with('success', "Uspesno ste azurirali kategorije korisnika");
+    }
+    public function showCreate()
+    {
+        $categories = Auth::user()->categories;
+        return view('editor.create-post', [
+            'categories' => $categories
+        ]);
     }
 }
