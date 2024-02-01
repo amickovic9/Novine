@@ -20,8 +20,8 @@
                     <h5 class="card-title">Zahtev za izmenu</h5>
                     <p>Stari naslov: {{$editRequest->news ? $editRequest->news->naslov : 'Nije pronađeno'}}</p>
                     <p>Novi naslov: {{$editRequest->naslov}}</p>
-                    <p>Stari tekst: {{$editRequest->news ? $editRequest->news->tekst : 'Nije pronađeno'}}</p>
-                    <p>Novi tekst: {{$editRequest->tekst}}</p>
+                    <p>Stari tekst: {!! \App\Services\TextFormattingService::renderFormattedText($editRequest->news ? $editRequest->news->tekst : '') !!}</p>
+                    <p>Novi tekst: {!! \App\Services\TextFormattingService::renderFormattedText($editRequest->tekst) !!}</p>
                     <p>Stara Rubrika: {{$editRequest->news ? $editRequest->news->rubrika : 'Nije pronađeno'}}</p>
                     <p>Nova Rubrika: {{$editRequest->rubrika}}</p>
                     <p>Stari Tagovi:

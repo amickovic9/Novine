@@ -11,11 +11,16 @@
     @include('navbar')
     <div class="container mt-4">
         <h1>Upravljanje draftom</h1>
-        <form action='' method='post' class="mt-3">
+        <form action='' method='post' class="mt-3"  enctype="multipart/form-data">
             @csrf
             <div class="form-group">
                 <label for="naslov">Naslov</label>
                 <input type="text" class="form-control" name="naslov" id="naslov" value="{{$draft->naslov}}">
+            </div>
+            <div class="form-group">
+                <label for="naslovna">Izmeni naslovnu sliku</label>
+                <input type="file" class="form-control-file" id="naslovna" name="naslovna">
+                <img src="{{ asset('storage/naslovne/' . $draft->naslovna) }}" alt="Naslovna slika">
             </div>
             <div class="form-group">
                 <label for="tekst">Tekst</label>
@@ -25,6 +30,7 @@
                 <label for="rubrika">Rubrika</label>
                 <input type="text" class="form-control" name="rubrika" id="rubrika" value="{{$draft->rubrika}}">
             </div>
+            
             <div class="form-group">
                 <label for="tag">Taggovi članka</label>
                 <textarea class="form-control" id="tags" name="tags" rows="5">@foreach($draft->tags as $tag){{$tag->name}} @endforeach</textarea>

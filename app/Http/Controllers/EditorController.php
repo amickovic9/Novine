@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Models\ArticleEditRequests;
 use App\Models\ArticleDeleteRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class EditorController extends Controller
 {
@@ -36,7 +38,12 @@ class EditorController extends Controller
         if ($article->likes()->exists()) {
             $article->likes()->delete();
         }
-
+        if ($article->naslovna != null) {
+            $oldImagePath = storage_path('app/public/naslovne/' . $article->naslovna);
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
+            }
+        }
         $article->delete();
     }
     public function showCMS()
@@ -92,10 +99,26 @@ class EditorController extends Controller
         if (in_array($draft->rubrika, Auth::user()->categories()->pluck('categories.id')->toArray()) && $draft->draft == 1) {
             $fields = $request->validate([
                 'tekst' => 'required',
+                'naslovna' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+
                 'naslov' => 'required',
                 'rubrika' => 'required',
                 'tags' => 'required'
             ]);
+            if ($request->hasFile('naslovna')) {
+                $oldImagePath = storage_path('app/public/naslovne/' . $draft->naslovna);
+
+                Storage::delete('naslovne/' . $draft->naslovna);
+
+                if (Storage::missing('naslovne/' . $draft->naslovna) && File::exists($oldImagePath)) {
+                    File::delete($oldImagePath);
+                }
+
+                $naslovna = $request->file('naslovna');
+                $naslovnaIme = time() . '.' . $naslovna->getClientOriginalExtension();
+                $naslovna->storeAs('public/naslovne', $naslovnaIme);
+                $fields['naslovna'] = $naslovnaIme;
+            }
             $draft->update($fields);
             $draft->tags()->detach();
             $tagNames = explode(' ', $fields['tags']);
@@ -128,10 +151,25 @@ class EditorController extends Controller
         if (in_array($article->rubrika, Auth::user()->categories()->pluck('categories.id')->toArray())) {
             $fields = $request->validate([
                 'tekst' => 'required',
+                'naslovna' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
                 'naslov' => 'required',
                 'rubrika' => 'required',
                 'tags' => 'required'
             ]);
+            if ($request->hasFile('naslovna')) {
+                $oldImagePath = storage_path('app/public/naslovne/' . $article->naslovna);
+
+                Storage::delete('naslovne/' . $article->naslovna);
+
+                if (Storage::missing('naslovne/' . $article->naslovna) && File::exists($oldImagePath)) {
+                    File::delete($oldImagePath);
+                }
+
+                $naslovna = $request->file('naslovna');
+                $naslovnaIme = time() . '.' . $naslovna->getClientOriginalExtension();
+                $naslovna->storeAs('public/naslovne', $naslovnaIme);
+                $fields['naslovna'] = $naslovnaIme;
+            }
             $article->update($fields);
             $article->tags()->detach();
             $tagNames = explode(' ', $fields['tags']);
@@ -210,6 +248,15 @@ class EditorController extends Controller
     {
         $article = $editRequest->news;
         if ($this->articleCheck($article)) {
+            if ($editRequest['naslovna'] != null) {
+                $filePath = storage_path('app/public/naslovne/' . $article->naslovna);
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+                $article['naslovna'] = $editRequest['naslovna'];
+            } else {
+                $editRequest['naslovna'] = $article['naslovna'];
+            }
             $article->update($editRequest->toArray());
             $tags = $editRequest->tags;
             $article->tags()->detach();
@@ -225,6 +272,13 @@ class EditorController extends Controller
         $article = $editRequest->news;
         if ($this->articleCheck($article)) {
             $editRequest->tags()->detach();
+            if ($editRequest['naslovna'] != null) {
+                $filePath = storage_path('app/public/naslovne/' . $editRequest->naslovna);
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+            }
+
             $editRequest->delete();
             return back()->with('success', 'Uspesno ste odbili izmenu clanka!');
         }

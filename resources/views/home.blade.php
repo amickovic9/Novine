@@ -16,23 +16,22 @@
             <div class="form-row">
                 <div class="col-md-4 mb-3">
                     <label for="naslov">Naslov</label>
-                    <input type="text" class="form-control" name="naslov" id="naslov" placeholder="Naslov" value="{{request()->input('naslov')}}">
+                    <input type="text" class="form-control" name="naslov" id="naslov" placeholder="Naslov" value="{{ request()->input('naslov') }}">
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="tagovi">Tagovi</label>
-                    <input type="text" class="form-control" name="tagovi" id="tagovi" placeholder="Tagovi" value="{{request()->input('tagovi')}}">
+                    <input type="text" class="form-control" name="tagovi" id="tagovi" placeholder="Tagovi" value="{{ request()->input('tagovi') }}">
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="datum">Datum</label>
-                    <input type="date" class="form-control" name="datum" id="datum" value="{{request()->input('datum')}}">
+                    <input type="date" class="form-control" name="datum" id="datum" value="{{ request()->input('datum') }}">
                 </div>
-                <div>
-                    <select name="rubrika" id="">
+                <div class="col-md-4 mb-3">
+                    <label for="rubrika">Rubrika</label>
+                    <select name="rubrika" class="form-control">
                         <option value="">Izaberi</option>
                         @foreach ($categories as $category)
-                            <option value="{{$category->id}}" @if ($category->id == request()->input('rubrika'))
-                                selected
-                            @endif>{{$category->category}}</option>
+                            <option value="{{ $category->id }}" @if ($category->id == request()->input('rubrika')) selected @endif>{{ $category->category }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -43,6 +42,9 @@
             @foreach ($news as $article)
             <div class="col-md-4 mb-4">
                 <div class="card">
+                    @if ($article['naslovna'])
+                        <img src="{{ asset('storage/naslovne/' . $article['naslovna']) }}" class="card-img-top" alt="Naslovna slika">
+                    @endif
                     <div class="card-body">
                         <h5 class="card-title">Naslov: {{ $article['naslov'] }}</h5>
                         <a href="/article/{{ $article['id'] }}" class="btn btn-primary">Više</a>

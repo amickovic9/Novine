@@ -11,6 +11,8 @@ use App\Models\UserCategories;
 use App\Models\Users_categories;
 use App\Models\ArticleEditRequests;
 use App\Models\ArticleDeleteRequest;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class CMSController extends Controller
 {
@@ -283,6 +285,7 @@ class CMSController extends Controller
     {
         $fields = $request->validate([
             'naslov' => 'required',
+
             'tekst' => 'required',
             'rubrika' => 'required',
             'tag' => 'required',
@@ -338,10 +341,26 @@ class CMSController extends Controller
     {
         $fields = $request->validate([
             'naslov' => 'required',
+            'naslovna' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+
             'tekst' => 'required',
             'rubrika' => 'required',
             'tag' => 'required',
         ]);
+        if ($request->hasFile('naslovna')) {
+            $oldImagePath = storage_path('app/public/naslovne/' . $article->naslovna);
+
+            Storage::delete('naslovne/' . $article->naslovna);
+
+            if (Storage::missing('naslovne/' . $article->naslovna) && File::exists($oldImagePath)) {
+                File::delete($oldImagePath);
+            }
+
+            $naslovna = $request->file('naslovna');
+            $naslovnaIme = time() . '.' . $naslovna->getClientOriginalExtension();
+            $naslovna->storeAs('public/naslovne', $naslovnaIme);
+            $fields['naslovna'] = $naslovnaIme;
+        }
         $article->update($fields);
         $article->tags()->detach();
         $tagNames = explode(' ', $fields['tag']);

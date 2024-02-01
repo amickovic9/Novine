@@ -1,3 +1,7 @@
+@php
+    use App\Services\TextFormattingService;
+@endphp
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +15,14 @@
     @include('navbar')  
     <div class="container mt-4">
         <h1>{{$article['naslov']}}</h1>
-        <p>{{$article['tekst']}}</p>
+         @if ($article['naslovna'])
+            <img src="{{ asset('storage/naslovne/' . $article['naslovna']) }}" class="img-fluid" alt="Naslovna slika">
+        @endif
+        <div id="formatted-text">
+    {!! TextFormattingService::renderFormattedText($article['tekst']) !!}
+</div>
+
+
         <p>Iz rubrike: {{$article->category->category}}</p>
         @if ($liked)
             <a href="/article/{{$article->id}}/dislike">Ne svidja mi se</a>
@@ -44,6 +55,19 @@
             @endforeach
         </div>
     </div>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+    var quill = new Quill('#editor', {
+        theme: 'snow'
+    });
+
+    var form = document.querySelector('form');
+    form.onsubmit = function() {
+        var tekst = document.querySelector('input[name=tekst]');
+        tekst.value = JSON.stringify(quill.getContents());
+    };
+</script>
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

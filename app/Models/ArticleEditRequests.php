@@ -12,6 +12,7 @@ class ArticleEditRequests extends Model
         'article_id',
         'category_id',
         'naslov',
+        'naslovna',
         'tekst',
         'rubrika',
     ];

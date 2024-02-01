@@ -40,6 +40,9 @@
                 <div class="card mb-3">
                     <div class="card-body">
                         <h5 class="card-title">{{$draft->naslov}}</h5>
+                        <div>
+                            <img src="{{ asset('storage/naslovne/' . $draft->naslovna) }}" alt="Naslovna slika">
+                        </div>
                         <p class="card-text">{{$draft->tekst}}</p>
                         @foreach($draft->tags as $tag)
                             <span class="badge badge-primary">{{$tag->name}}</span>

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use App\Models\News;
 use App\Models\User;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\TextFormattingService;
 
 class UserController extends Controller
 {
@@ -49,6 +50,7 @@ class UserController extends Controller
     }
     public function showHomePage(Request $request)
     {
+
         $categories = Category::all();
         $query = News::query()->where('draft', 0);
 
@@ -74,5 +76,10 @@ class UserController extends Controller
 
         $news = $query->get();
         return view('home', ['news' => $news, 'categories' => $categories]);
+    }
+    public function showArticle(News $article)
+    {
+
+        return view('article.show', ['article' => $article]);
     }
 }

@@ -44,6 +44,9 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">{{$post->naslov}}</h5>
+                            <div>
+                                <img src="{{ asset('storage/naslovne/' . $post->naslovna) }}" alt="Naslovna slika">
+                            </div>
                             <p class="card-text">{{$post->tekst}}</p>
                             <div class="card-footer">
                                 @foreach ($post->tags as $tag)

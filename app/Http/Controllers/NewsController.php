@@ -16,10 +16,17 @@ class NewsController extends Controller
     {
         $fields = $request->validate([
             'naslov' => 'required',
+            'naslovna' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'tekst' => 'required',
             'rubrika' => 'required',
             'tagovi' => 'required'
         ]);
+        if ($request->hasFile('naslovna')) {
+            $naslovnaSlika = $request->file('naslovna');
+            $naslovnaIme = time() . '.' . $naslovnaSlika->getClientOriginalExtension();
+            $naslovnaSlika->storeAs('public/naslovne', $naslovnaIme);
+            $fields['naslovna'] = $naslovnaIme;
+        }
 
         $fields['user_id'] = Auth::user()->id;
         $draft = News::create($fields);
