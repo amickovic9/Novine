@@ -43,16 +43,7 @@ class CMSController extends Controller
 
         $article->delete();
     }
-    public function showCMSScreen()
-    {
-        return view('cms.cms');
-    }
-    public function showCreatePostScreen()
-    {
-        $categories = Category::all();
-        return view('cms.create-post', ['categories' => $categories]);
-    }
-    public function showUsers(Request $request)
+    public function showCMSScreen(Request $request)
     {
         $query = User::query();
         if ($request->filled('name')) {
@@ -64,9 +55,34 @@ class CMSController extends Controller
         if ($request->filled('role')) {
             $query->where('role', 'like', '%' . $request['role'] . '%');
         }
+        $categories = Category::all();
         $users = $query->get();
-        return view('cms.users', ['users' => $users]);
+
+
+        $query = News::query();
+        if ($request->filled('naslov')) {
+            $query->where('naslov', 'like', '%' . $request['naslov'] . '%');
+        }
+        if ($request->filled('date')) {
+            $query->whereDate('created_at', $request->input('date'));
+        }
+        if ($request->filled('rubrika')) {
+            $query->whereHas('category', function ($q) use ($request) {
+                $q->where('id', $request->input('rubrika'));
+            });
+        }
+        $posts = $query->get();
+        return view('cms.cms', [
+            'users' => $users,
+            'posts' => $posts,
+        ]);
     }
+    public function showCreatePostScreen()
+    {
+        $categories = Category::all();
+        return view('cms.create-post', ['categories' => $categories]);
+    }
+
     public function showEditUser(User $user)
     {
         return view('cms.edit-user', ['user' => $user]);
@@ -86,17 +102,7 @@ class CMSController extends Controller
         $user->delete();
         return back()->with('succes', 'Uspesno ste izbrisali korisnika!');
     }
-    public function showNovinar(Request $request)
-    {
-        $query = User::query()
-            ->with('categories')
-            ->where('role', 'like', '2');
-        if ($request->filled('name')) {
-            $query->where('name', 'like', '%' . $request['name'] . '%');
-        }
-        $novinari = $query->get();
-        return view('cms.novinari', ['novinari' => $novinari]);
-    }
+
 
 
     public function showCategories(Request $request)
@@ -168,11 +174,7 @@ class CMSController extends Controller
         $categoriesToAdd = array_diff($newCategories, $userCategories);
         $user->categories()->attach($categoriesToAdd);
 
-        if ($user->role == 2) {
-            return redirect('/cms/journalist')->with('success', 'Kategorije su uspešno ažurirane.');
-        } elseif ($user->role == 3) {
-            return redirect('/cms/editors')->with('success', 'Kategorije su uspešno ažurirane.');
-        }
+        return redirect('/cms')->with('success', 'Uspesno ste azurirali kategorije');
     }
     public function showEditors(Request $request)
     {
@@ -247,24 +249,7 @@ class CMSController extends Controller
         $editRequest->delete();
         return back()->with('success', 'Odbili ste izmenu clanka!');
     }
-    public function showPosts(Request $request)
-    {
-        $categories = Category::all();
-        $query = News::query()->where('draft', 'like', '0');
-        if ($request->filled('naslov')) {
-            $query->where('naslov', 'like', '%' . $request['naslov'] . '%');
-        }
-        if ($request->filled('date')) {
-            $query->whereDate('created_at', $request->input('date'));
-        }
-        if ($request->filled('rubrika')) {
-            $query->whereHas('category', function ($q) use ($request) {
-                $q->where('id', $request->input('rubrika'));
-            });
-        }
-        $posts = $query->get();
-        return view('CMS.posts', compact('posts', 'categories'));
-    }
+
     public function delArticle(News $article)
     {
         $this->deleteArticle($article);
@@ -300,77 +285,19 @@ class CMSController extends Controller
             $tagIDs[] = $tag->id;
         }
         $article->tags()->sync($tagIDs);
-        return redirect('/cms/posts')->with('success', 'Uspesno ste izmenili clanak!');
+        return redirect('/cms')->with('success', 'Uspesno ste izmenili clanak!');
     }
-    public function showDrafts(Request $request)
-    {
-        $categories = Category::all();
-        $query = News::query()->where('draft', 'like', '1');
-        if ($request->filled('naslov')) {
-            $query->where('naslov', 'like', '%' . $request['naslov'] . '%');
-        }
-        if ($request->filled('date')) {
-            $query->whereDate('created_at', $request->input('date'));
-        }
-        if ($request->filled('rubrika')) {
-            $query->whereHas('category', function ($q) use ($request) {
-                $q->where('id', $request->input('rubrika'));
-            });
-        }
-        $drafts = $query->get();
-        return view('CMS.drafts', compact('drafts', 'categories'));
-    }
+
     public function deleteDraft(News $draft)
     {
         $draft->tags()->detach();
         $draft->delete();
         return redirect('/cms/drafts')->with('success', 'Uspesno ste izbrisali draft!');
     }
-    public function allowDraft(News $draft)
-    {
-        $draft['draft'] = 0;
-        $draft->update();
-        return back()->with('success', 'Uspesno ste objavili clanak!');
-    }
+
     public function showEditArticleScreen(News $article)
     {
         $categories = Category::all();
         return view('journalist.edit-post', compact('article', 'categories'));
-    }
-    public function editArticle(News $article, Request $request)
-    {
-        $fields = $request->validate([
-            'naslov' => 'required',
-            'naslovna' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-
-            'tekst' => 'required',
-            'rubrika' => 'required',
-            'tag' => 'required',
-        ]);
-        if ($request->hasFile('naslovna')) {
-            $oldImagePath = storage_path('app/public/naslovne/' . $article->naslovna);
-
-            Storage::delete('naslovne/' . $article->naslovna);
-
-            if (Storage::missing('naslovne/' . $article->naslovna) && File::exists($oldImagePath)) {
-                File::delete($oldImagePath);
-            }
-
-            $naslovna = $request->file('naslovna');
-            $naslovnaIme = time() . '.' . $naslovna->getClientOriginalExtension();
-            $naslovna->storeAs('public/naslovne', $naslovnaIme);
-            $fields['naslovna'] = $naslovnaIme;
-        }
-        $article->update($fields);
-        $article->tags()->detach();
-        $tagNames = explode(' ', $fields['tag']);
-
-        $tagIDs = [];
-        foreach ($tagNames as $tagName) {
-            $tag = Tag::firstOrCreate(['name' => $tagName]);
-            $tagIDs[] = $tag->id;
-        }
-        $article->tags()->sync($tagIDs);
-        return redirect('/cms/drafts')->with('success', 'Uspesno ste izmenili draft!');
     }
 }
