@@ -6,20 +6,31 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Edit Article</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 </head>
 <body>
     @include('navbar')
     <div class="container mt-4">
-        <h1>Izmeni clanak</h1>
-        <form action="" method="POST">
+        <h1>Izmeni članak</h1>
+        <form action="" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
                 <label for="naslov">Naslov članka</label>
                 <input type="text" class="form-control" id="naslov" name="naslov" value="{{$article->naslov}}">
             </div>
+             <div class="form-group">
+                <label for="naslovna">Izmeni naslovnu sliku</label>
+                <input type="file" class="form-control-file" id="naslovna" name="naslovna">
+                <img src="{{ asset('storage/naslovne/' . $article->naslovna) }}" alt="Naslovna slika">
+            </div>
             <div class="form-group">
-                <label for="tekst">Tekst članka</label>
-                <textarea class="form-control" id="tekst" name="tekst" rows="5">{{$article->tekst}}</textarea>
+                <label for="tekst">Tekst artikla</label>
+                <div id="editor"></div>
+                <input type="hidden" id="tekst" name="tekst" value="{{$article->tekst}}">
+            </div>
+            <div class="form-group">
+                <label for="tag">Tagovi članka</label>
+                <textarea class="form-control" id="tag" name="tag">@foreach($article->tags as $tag){{$tag->name}} @endforeach</textarea>
             </div>
             <div class="form-group">
                 <label for="rubrika">Odaberi rubriku</label>
@@ -31,9 +42,41 @@
                     @endforeach
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Sačuvaj izmene</button>
+            <div class="gallery">
+        @foreach ($article->gallery as $galleryItem)
+            @if (Str::endsWith($galleryItem->photo_video, ['.mp4', '.mov', '.avi', '.mkv']))
+                <video width="320" height="240" controls>
+                    <source src="{{ asset('storage/gallery/' . $galleryItem->photo_video) }}" type="video/mp4">
+                    Vaš pregledač ne podržava video element.
+                </video>
+            @else
+                <img src="{{ asset('storage/gallery/' . $galleryItem->photo_video) }}" alt="{{ $galleryItem->photo_video }}">
+            @endif
+@endforeach
+</div>
+<div class="form-group">
+            Foto/video
+                
+            <input type="file" name="files[]" id="files" multiple>
+        </div>
+            <button type="submit" class="btn btn-primary mb-2" style="background-color: #17a2b8; border-color: #17a2b8;" >Sačuvaj izmene</button>
         </form>
     </div>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+        var quill = new Quill('#editor', {
+            theme: 'snow'
+        });
+        var tekst = document.querySelector('input[name=tekst]').value;
+        quill.setContents(JSON.parse(tekst));
+        
+    
+        var form = document.querySelector('form');
+        form.onsubmit = function() {
+            var tekst = document.querySelector('input[name=tekst]');
+            tekst.value = JSON.stringify(quill.getContents());
+        };
+    </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

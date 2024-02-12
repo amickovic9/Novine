@@ -10,6 +10,10 @@
 <body>
     @include('navbar')
     <div class="container mt-4">
+        <form action="">
+            <input type="text" class="form-control" placeholder="Naslov"> <!-- Dodavanje klase form-control -->
+            <button type="submit" class="btn btn-primary">Pretrazi</button> <!-- Dodavanje Bootstrap klase za gumb -->
+        </form>
         <h1>Upravljanje draftovima</h1>
         <ul class="list-group">
             @foreach ($drafts as $draft)
