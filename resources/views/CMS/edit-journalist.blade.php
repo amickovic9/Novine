@@ -6,10 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Uredi novinara</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        /* Možete dodati dodatni stil ovde */
-    </style>
+  <style> 
+  input[type="checkbox"] {
+    accent-color:#17a2b8 ;    
+}
+</style> 
 </head>
+
 <body>
     @include('navbar')
     <div class="container mt-4">
@@ -30,7 +33,7 @@
                     </div>
                 @endforeach
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Sačuvaj</button>
+            <button type="submit" class="btn btn-primary mt-3" style="background-color: #17a2b8; border-color: #17a2b8;">Sačuvaj</button>
         </form>
     </div>
 

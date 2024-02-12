@@ -1,0 +1,51 @@
+.form-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    background-color: #f9f9f9; 
+    margin-top: 40px;
+}
+
+.h1-text {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #17a2b8;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 13px;
+}
+
+.sign-up-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #17a2b8;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.sign-up-btn:hover {
+    background-color: #365486;
+    transform: scale(1.01);
+    transition: ease-in-out 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #17a2b8;
+    box-shadow: 0 0 5px rgba(23, 162, 184, 0.5);
+}

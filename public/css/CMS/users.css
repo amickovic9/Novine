@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+.h1-text{
+    font-size: 1.5rem;
+}
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+h1 {
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    text-align: left;
+}
+
+a.btn-edit,
+a.btn-delete {
+    display: inline-block;
+    padding: 8px 0px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #17a2b8;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    text-align: center;
+    width: 100%;
+}
+a.btn-delete {
+    background-color: red;
+    }
+    a.btn-delete:hover{
+        background-color: rgb(159, 8, 8);
+        text-decoration: none;
+        color: white; 
+        transform: scale(1.1); 
+        transition: all ease-in-out 0.5s;
+    }   
+a.btn-edit:hover{
+    background-color: #365486;
+    text-decoration: none;
+    color: white;
+    transform: scale(1.1); 
+    transition: all ease-in-out 0.5s;
+}
+
+
+
+@media screen and (min-width: 768px) {
+    
+    .container .btn-edit,
+    .container .btn-delete {
+        display: block;
+        margin-top: 20px;
+        padding: 5px 0px;
+    }
+}

@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Uredi Korisnika</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/CMS/edituser.css" rel="stylesheet">
 </head>
 <body>
 
 @include('navbar')
 
 <div class="container mt-4">
-    <h1>Uredi Korisnika</h1>
+    <h1 class="naslov">Uredi Korisnika</h1>
     <form action="/cms/update-user/{{$user['id']}}" method="POST">
         @csrf 
         <div class="form-group">
@@ -30,10 +30,9 @@
                 <option value="4" @if($user['role'] == '4') selected @endif>4</option>
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Ažuriraj Korisnika</button>
+        <button type="submit">Ažuriraj Korisnika</button>
     </form>
 </div>
 
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
