@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+/* Form styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="text"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+/* Button styles */
+.btn-create {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.btn-create:hover {
+    background-color: #0056b3;
+}
+.requests { 
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+.delete-requests,
+ .edit-requests {
+    margin: 10px 10px;
+    padding: 15px 15px;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom, #8CB9BD,#ECB159);
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+
+}
+.delete-requests:hover,
+ .edit-requests:hover{
+    transform: scale(1.05); 
+    transition: all ease-in-out 0.5s;
+    cursor: pointer;
+ }
+.number-request { 
+    font-size: 2rem;
+}
+.naslov{
+    font-size: 1rem;
+}
+.naslov1{ 
+    font-size: 1.5rem;
+}
+.clanci {
+    margin-bottom: 20px;
+}
+
+.kategorija {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.kategorija a {
+    display: inline-block;
+    padding: 10px 15px;
+    margin-right: 10px;
+    background-color: #17a2b8;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    
+}
+
+.kategorija a:hover {
+    background-color: #245358;
+    transform: scale(1.1);
+    transition: all ease-in-out 0.5s;
+    color: #fff;
+    text-decoration: none;
+}

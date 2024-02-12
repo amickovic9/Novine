@@ -7,6 +7,7 @@
     <title>Zahtevi za brisanje</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
     @include('navbar')
     <div class="container mt-4">
@@ -18,7 +19,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <p class="card-text">Naslov: {{ $deleteRequest->news->naslov }}</p>
-                            <a href="/article/{{ $deleteRequest->news->id }}" class="btn btn-primary mr-2">Vidi članak</a>
+                            <a href="/article/{{ $deleteRequest->news->id }}" class="btn btn-primary mr-2" style="background-color: #365486; border-color: #365486;">Vidi članak</a>
                             <a href="/cms-editor/delete-request/{{ $deleteRequest->id }}/allow" class="btn btn-success mr-2">Dozvoli zahtev za brisanje</a>
                             <a href="/cms-editor/delete-request/{{ $deleteRequest->id }}/decline" class="btn btn-danger">Odbij zahtev za brisanje</a>
                         </div>
