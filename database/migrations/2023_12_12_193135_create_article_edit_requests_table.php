@@ -17,8 +17,10 @@ class CreateArticleEditRequestsTable extends Migration
             $table->id();
             $table->foreignId('article_id');
             $table->foreignId('category_id');
-            $table->string('naslov');
-            $table->string('tekst');
+            $table->string('naslov')->nullable()->default(null);
+            $table->string('naslovna')->nullable()->default(null);
+            $table->text('tekst')->nullable();
+
             $table->foreignId('rubrika');
             $table->timestamps();
         });

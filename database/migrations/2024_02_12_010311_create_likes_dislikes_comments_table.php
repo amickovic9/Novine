@@ -1,10 +1,9 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTagsTable extends Migration
+class CreateLikesDislikesCommentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +12,12 @@ class CreateTagsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tags', function (Blueprint $table) {
+        Schema::create('likes_dislikes_comments', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('comment_id')->constrained()->onDelete('cascade');
+            $table->string('ip_address');
+            $table->boolean('like')->default(false);
+            $table->boolean('dislike')->default(false);
             $table->timestamps();
         });
     }
@@ -27,6 +29,7 @@ class CreateTagsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tags');
+        Schema::dropIfExists('likes_dislikes_comments');
     }
 }
+

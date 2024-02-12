@@ -5,16 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Comment extends Model
+class Dislikes extends Model
 {
     use HasFactory;
     protected $fillable = [
         'article_id',
-        'user_name',
-        'comment',
+        'ip_address',
     ];
-    public function likesDislikes()
-    {
-        return $this->hasMany(LikeDislikeComment::class);
+    public function news(){
+        return $this->hasOne(News::class,'id' ,'article_id');
     }
 }

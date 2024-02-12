@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Tag;
 use App\Models\News;
 use App\Models\Likes;
+use App\Models\Gallery;
+use App\Models\LikeDislikeComment;
+use App\Models\Dislikes;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -12,93 +15,200 @@ use function PHPUnit\Framework\isEmpty;
 
 class NewsController extends Controller
 {
-    public function createPost(Request $request){
-            $fields = $request->validate([
+    public function createPost(Request $request)
+{
+    $fields = $request->validate([
         'naslov' => 'required',
+        'naslovna' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         'tekst' => 'required',
         'rubrika' => 'required',
-        'tagovi' => 'required'
+        'tagovi' => 'required',
+        'files' =>'',
     ]);
+
 
     $fields['user_id'] = Auth::user()->id;
     $draft = News::create($fields);
 
-    $tagNames = explode(' ', $fields['tagovi']);
-
-    // Kreiranje i sinhronizacija tagova
-    $tagIDs = [];
-    foreach ($tagNames as $tagName) {
-        $tag = Tag::firstOrCreate(['name' => $tagName]);
-        $tagIDs[] = $tag->id; 
+    if ($request->hasFile('naslovna')) {
+        $naslovnaSlika = $request->file('naslovna');
+        $naslovnaIme = time() . '.' . $naslovnaSlika->getClientOriginalExtension();
+        $naslovnaSlika->storeAs('public/naslovne', $naslovnaIme);
+        $draft->update(['naslovna' => $naslovnaIme]);
     }
 
-    $draft->tags()->sync($tagIDs);
+    if ($request->hasFile('files')) {
+        $galerijaFajlovi = $request->file('files');
 
-    if(Auth::user()->role == 4){
-        return redirect('/cms')->with('success','Uspesno ste kreirali clanak');
-    } else if(Auth::user()->role == 2){
-        return redirect('/cms-journalist/drafts')->with('success','Uspesno ste kreirali clanak');
-    }
-}
+        foreach ($galerijaFajlovi as $file) {
+            $imeFajla = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/gallery', $imeFajla);
 
-    public function checkArticle(News $article){
-        if($article->draft == 0){
-            return true;
-        }
-        return redirect('/');
-    }
-    public function showArticle(News $article){
-        if($this->checkArticle($article)){
-            $address = request()->ip();
-            $like = Likes::where('ip_address', $address)
-                        ->where('article_id', $article->id)
-                        ->first();
-
-            if ($like) {
-                $liked = true;
-            } else {
-                $liked = false;
-            }
-
-            
-
-            $comments = $article->comments()->get();
-            return view('article', [
-                'article' => $article,
-                'comments' => $comments,
-                'liked' => $liked,
+            Gallery::create([
+                'news_id' => $draft->id, 
+                'photo_video' => $imeFajla
             ]);
         }
     }
 
+    $tagNames = explode(' ', $fields['tagovi']);
+    $tagIDs = [];
 
-
-    public function like(News $article){
-        if ($this->checkArticle($article)) {
-            $address = request()->ip();
-
-            $existingLike = Likes::where('ip_address', $address)
-                                ->where('article_id', $article->id)
-                                ->first();
-
-            if (!$existingLike) {
-                $fields['ip_address'] = $address;
-                $fields['article_id'] = $article->id;
-                Likes::create($fields);
-            }
-        }
-        return back();
+    foreach ($tagNames as $tagName) {
+        $tag = Tag::firstOrCreate(['name' => $tagName]);
+        $tagIDs[] = $tag->id;
     }
 
-    public function dislike(News $article){
-        if($this->checkArticle($article)){
+    $draft->tags()->sync($tagIDs);
+
+    if (Auth::user()->role == 4) {
+        return redirect('/cms')->with('success', 'Uspesno ste kreirali clanak');
+    } else if (Auth::user()->role == 2) {
+        return redirect('/cms-journalist')->with('success', 'Uspesno ste kreirali clanak');
+    } else if (Auth::user()->role == 3) {
+        return redirect('/cms-editor')->with('success', 'Uspesno ste kreirali clanak');
+    }
+}
+
+
+    public function showArticle(News $article)
+    {
+        
+            $address = request()->ip();
+            
+            $like = Likes::where('ip_address', $address)
+                ->where('article_id', $article->id)
+                ->first();
+    
+            $liked = $like ? true : false;
+    
+            $query = Likes::query();
+            $likeCount = $query->where('article_id', $article->id)->count();
+    
+            $dislike = Dislikes::where('ip_address', $address)
+                ->where('article_id', $article->id)
+                ->first();
+    
+            $disliked = $dislike ? true : false;
+    
+            $dislikeCount = Dislikes::where('article_id', $article->id)->count();
+            
+            $comments = $article->comments()->get();
+            foreach ($comments as $comment) {
+                $like = LikeDislikeComment::where('ip_address', $address)
+                    ->where('comment_id', $comment->id)
+                    ->where('like', true)
+                    ->first();
+                $liked = $like ? true : false;
+                $likeCount = LikeDislikeComment::where('comment_id', $comment->id)
+                    ->where('like', true)
+                    ->count();
+            
+                $dislike = LikeDislikeComment::where('ip_address', $address)
+                    ->where('comment_id', $comment->id)
+                    ->where('dislike', true)
+                    ->first();
+                $disliked = $dislike ? true : false;
+                $dislikeCount = LikeDislikeComment::where('comment_id', $comment->id)
+                    ->where('dislike', true)
+                    ->count();
+                
+                $comment->liked = $liked;
+                $comment->likeCount = $likeCount;
+                $comment->disliked = $disliked;
+                $comment->dislikeCount = $dislikeCount;
+            }
+            return view('article', [
+                'article' => $article,
+                'comments' => $comments,
+                'liked' => $liked,
+                'likeCount' => $likeCount,
+                'disliked' => $disliked,
+                'dislikeCount' => $dislikeCount
+            ]);
+        
+    }
+    
+
+
+    public function like(News $article)
+{
+   
+        $address = request()->ip();
+
+        $existingLike = Likes::where('ip_address', $address)
+            ->where('article_id', $article->id)
+            ->first();
+
+        if ($existingLike) {
+            $existingLike->delete();
+        }
+
+        $existingDislike = Dislikes::where('ip_address', $address)
+            ->where('article_id', $article->id)
+            ->first();
+
+        if ($existingDislike) {
+            $existingDislike->delete();
+        }
+
+        $fields['ip_address'] = $address;
+        $fields['article_id'] = $article->id;
+        Likes::create($fields);
+        return back();
+    
+}
+
+    public function dislike(News $article)
+{
+    
+        $address = request()->ip();
+
+        $existingDislike = Dislikes::where('ip_address', $address)
+            ->where('article_id', $article->id)
+            ->first();
+
+        if ($existingDislike) {
+            $existingDislike->delete();
+        }
+
+        $existingLike = Likes::where('ip_address', $address)
+            ->where('article_id', $article->id)
+            ->first();
+
+        if ($existingLike) {
+            $existingLike->delete();
+        }
+
+        $fields['ip_address'] = $address;
+        $fields['article_id'] = $article->id;
+        Dislikes::create($fields);
+        return back();
+
+    
+}
+
+    public function removeLike(News $article)
+    {
+       
             $ip = request()->ip();
-            $existingLike = Likes::where('article_id',$article->id)->where('ip_address',$ip)->first();
-            if($existingLike){
+            $existingLike = Likes::where('article_id', $article->id)->where('ip_address', $ip)->first();
+            if ($existingLike) {
                 $existingLike->delete();
             }
             return back();
-        }
+        
     }
-   
+    public function removeDislike(News $article)
+    {
+        $ip = request()->ip();
+        $existingDislike = Dislikes::where('article_id', $article->id)->where('ip_address', $ip)->first();
+        
+        if ($existingDislike) {
+            $existingDislike->delete();
+        }
+
+        return back();
+    }
+
 }

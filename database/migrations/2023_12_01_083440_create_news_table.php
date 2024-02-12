@@ -17,9 +17,10 @@ class CreateNewsTable extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->string('naslov');
-            $table->string('tekst');
+            $table->string('naslovna');
+            $table->text('tekst')->nullable();
             $table->foreignId('rubrika');
-            $table->boolean('draft')->default(0);
+            $table->boolean('draft')->default(1);
             $table->timestamps();
         });
     }
