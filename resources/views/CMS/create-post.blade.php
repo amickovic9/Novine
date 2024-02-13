@@ -34,6 +34,25 @@ use App\Services\TextFormattingService;
             color:white;
             transform:scale(1.1);
         }
+        #tagsContainer { 
+            margin-top: 10px;
+            font-size:12px;
+
+        }
+        .tag-box {
+            display: inline-block;
+            padding: 5px;
+            margin: 5px;
+            border-radius: 5px;
+            color: black;
+        }
+
+        .tags-frame {
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+
     </style>
 </head>
 
@@ -64,8 +83,12 @@ use App\Services\TextFormattingService;
             </select>
         </div>
         <div class="form-group">
-            <input type="text" name="tagovi" id="tagovi" class="form-control" placeholder="Tagovi">
-        </div>
+    <input id="tagovi" class="form-control" placeholder="Tagovi">
+    <div id="tagsContainer"></div>
+</div>
+
+
+
         <div class="form-group">
             Foto/video
                 
@@ -75,19 +98,13 @@ use App\Services\TextFormattingService;
         <button type="submit" class=" custom-btn-primary">Kreiraj objavu</button> 
     </form>
 </div>
-
+<script src="/js/script.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script >
 var quill = new Quill('#editor', {
     theme: 'snow'
 });
-
-var form = document.querySelector('form');
-form.onsubmit = function() {
-    var tekstInput = document.querySelector('input[name=tekst]');
-    tekstInput.value = JSON.stringify(quill.getContents());
-};
 </script>
 </body>
 </html>

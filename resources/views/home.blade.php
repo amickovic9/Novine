@@ -83,14 +83,14 @@
         }
         .image-container {
              position: relative;
-             height: 12rem;
+             height: 10rem;
              overflow: hidden;
              
             }
 
         .category-badge {
             position: absolute;
-            bottom: 5px;
+            top: 5px;
             right: 5px;
             padding: 5px 10px;
             background-color: rgba(39,128,186, 0.6);
