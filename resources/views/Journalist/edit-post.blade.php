@@ -125,9 +125,8 @@
                 <input type="hidden" id="tekst" name="tekst" value="{{$article->tekst}}">
             </div>
             <div class="form-group">
-    <textarea id="tagovi" class="form-control" id="tag" name="tag">@foreach($article->tags as $tag){{$tag->name}} @endforeach</textarea>
-    <div id="tagsContainer"></div>
-                
+                <textarea id="tagovi" class="form-control" id="tag" name="tag">@foreach($article->tags as $tag){{$tag->name}} @endforeach</textarea>
+            <div id="tagsContainer"></div>    
             </div>
             <div class="form-group">
                 <label for="rubrika">Odaberi rubriku</label>

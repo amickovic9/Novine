@@ -12,6 +12,23 @@
             border: 1px solid #ccc;
             min-height: 300px;
         }
+        #tagsContainer { 
+            margin-top: 10px;
+            font-size:12px;
+
+        }
+        .tag-box {
+            display: inline-block;
+            padding: 5px;
+            margin: 5px;
+            border-radius: 5px;
+            color: black;
+        }
+
+        .tags-frame {
+            padding: 5px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -36,9 +53,11 @@
                 </div>
                 <input type="hidden" id="tekst" name="tekst">
             </div>
+            
             <div class="form-group">
+                <div id="tagsContainer"></div>
                 <label for="tekst">Tagovi</label>
-                <textarea type="text" class="form-control" name="tags" id="tags">@foreach ($draft->tags as $tag ){{$tag->name}} @endforeach</textarea>
+                <textarea type="text" id="tagovi"  class="form-control" name="tags" id="tags">@foreach ($draft->tags as $tag ){{$tag->name}} @endforeach</textarea>
             </div>
             <div class="form-group">
                 <label for="rubrika">Odaberi rubriku</label>
@@ -70,7 +89,7 @@
         </form>
         
     </div>
-
+    <script src="/js/script.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script>
