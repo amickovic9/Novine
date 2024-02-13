@@ -67,8 +67,8 @@
         <a href="/cms-editor/create" class="btn-success1">Kreiraj objavu</a>
     </div>
 
-    <div class="container mt-4 md-3">
-    <form class="form-inline" action="" method="get">
+    <div class="container mt-4 md-4 ">
+    <form class="form-inline mt-2 mb-2" action="" method="get">
     <div class="form-group mr-2">
         <input type="text" class="form-control" name="naslov" value="{{ request()->input('naslov') }}" placeholder="Unesite naslov">
     </div>
@@ -87,8 +87,12 @@
             @endforeach
         </select>
     </div>
-    <button type="submit" class="btn btn-primary">Pretraži</button>
+    <button type="submit" class="btn btn-primary" style="background-color: #17a2b8; border-color: #17a2b8;">
+        <i class="fas fa-search" style="color: white;"></i> 
+    </button>
 </form>
+
+
 
         <div class="table-responsive">
             <table class="table table-striped table-hover">
@@ -138,16 +142,21 @@
     <div class="container mt-4">
     <form action="" method="GET">
     <div class="form-row">
-        <div class="col-md-4 mb-3">
-            <label for="searchName">Ime:</label>
-            <input type="text" class="form-control"  name="name" value="{{ request()->input('name') }}">
-        </div>
-        <div class="col-md-4 mb-3">
-            <label for="searchEmail">Email:</label>
-            <input type="text" class="form-control" name="email" value="{{ request()->input('email') }}">
-        </div>
+    <div class="col-md-4 mb-3">
+        <label for="searchName">Ime:</label>
+        <input type="text" class="form-control" name="name" value="{{ request()->input('name') }}">
     </div>
-    <button class="btn btn-primary" type="submit">Pretraži</button>
+    <div class="col-md-4 mb-3">
+        <label for="searchEmail">Email:</label>
+        <input type="text" class="form-control" name="email" value="{{ request()->input('email') }}">
+    </div>
+    <div class="col-md-4 mb-3" style="display: flex; align-items: flex-end;">
+    <button class="btn btn-primary form-control" type="submit" style="height: 38px; width: 38px; background-color: #17a2b8; border-color: #17a2b8;">
+        <i class="fas fa-search" style="color: white;"></i>
+    </button>
+</div>
+</div>
+
 </form>
 
         <table class="table">
@@ -188,4 +197,5 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
+@include('footer')
 </html>

@@ -9,6 +9,7 @@
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
   <link rel="icon" href="images/fav-ico.ico" type="image/x-icon">
+  
 
 </head>
 <style>
@@ -53,7 +54,8 @@
 
 <nav class="navbar navbar-expand-lg navbar">
 <a class="navbar-brand" href="#">
-    <img src="logo.png" alt="Logo" height="50">
+<img src="{{ asset('logo.png') }}" alt="Logo" height="50">
+
 </a>
 
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

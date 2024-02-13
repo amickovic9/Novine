@@ -53,6 +53,7 @@
             transition:all ease-in-out 0.5s;
             border:none;
             width:100%;
+            text-align:center;
         }
 
         .custom-btn-secondary:hover {
@@ -95,23 +96,26 @@
  </div> 
     <div id="container-edit-user" class="container" style="display: none;">
     <h1 class="naslov">Upravljanje Korisnicima</h1>
-    <form action="">
-        <div class="form-row">
-            <div class="col-4 mb-3">
-                <label for="inputName">Ime:</label>
-                <input type="text" class="form-control" id="inputName" name="name" value="{{ request()->input('name') }}">
-            </div>
-            <div class="col-4 mb-3">
-                <label for="inputEmail">Email:</label>
-                <input type="text" class="form-control" id="inputEmail" name="email" value="{{ request()->input('email') }}">
-            </div>
-            <div class="col-4 mb-3">
-                <label for="inputRole">Role:</label>
-                <input type="text" class="form-control" id="inputRole" name="role" value="{{ request()->input('role') }}">
-            </div>
+    <form action="" class="form-inline">
+    <div class="row align-items-end">
+        <div class="col-md-3 mb-3">
+            <input type="text" class="form-control mr-3 mb-2" placeholder="Ime:" id="inputName" name="name" value="{{ request()->input('name') }}">
         </div>
-        <button class="custom-btn-primary" type="submit">Pretraži</button>
-    </form>
+        <div class="col-md-3 mb-3">
+            <input type="text" class="form-control mr-3 mb-2" placeholder="Email:" id="inputEmail" name="email" value="{{ request()->input('email') }}">
+        </div>
+        <div class="col-md-3 mb-3">
+            <input type="text" class="form-control mr-3 mb-2" placeholder="Rola:" id="inputRole" name="role" value="{{ request()->input('role') }}">
+        </div>
+        <div class="col-md-3 mb-3">
+            <button class="custom-btn-primary ml-2 mb-2" type="submit">
+                <i class="fas fa-search" style="color: white;"></i>
+            </button>
+        </div>
+    </div>
+</form>
+
+
     <a href="/cms/create-user" class="custom-btn-primary">Registruj korisnika</a>
     <table class="table mt-4">
         <thead class="thead">
@@ -149,25 +153,29 @@
         <a href="/cms/delete-requests" class="dugme">Upravljanje zahtevima za brisanje</a>
         <a href="/cms/edit-requests" class="dugme">Upravljanje zahtevima za izmene</a>
         </div>
-<form action="">
-        <div class="form-row">
-            <div class="col-4 mb-3">
-                <label for="inputName">Naslov:</label>
-                <input type="text" class="form-control" id="inputName" name="naslov" value="{{ request()->input('naslov') }}">
-            </div>
-            <div class="col-md-3 mb-3">
-                    <label for="rubrika">Rubrika</label>
-                    <select name="rubrika" class="form-control">
-                        <option value="">Izaberi</option>
-                        @foreach ($categories as $category)
-                            <option value="{{ $category->id }}" @if ($category->id == request()->input('rubrika')) selected @endif>{{ $category->category }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            
+        <form action="" class="form-inline">
+    <div class="row align-items-end">
+        <div class="col-md-4 mr-4 mb-3">
+            <label for="inputName">Naslov:</label>
+            <input type="text" class="form-control mr-2 mb-2" id="inputName" name="naslov" value="{{ request()->input('naslov') }}">
         </div>
-        <button class="custom-btn-primary" type="submit">Pretraži</button>
-    </form>
+        <div class="col-md-3 mr-3 mb-3">
+            <label for="rubrika">Rubrika:</label>
+            <select name="rubrika" class="form-control mr-2 mb-2">
+                <option value="">Izaberi</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}" @if ($category->id == request()->input('rubrika')) selected @endif>{{ $category->category }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-3 mr-3 mb-3">
+            <button class="custom-btn-primary ml-2 mb-2" type="submit">
+                <i class="fas fa-search" style="color: white;"></i>
+            </button>
+        </div>
+    </div>
+</form>
+
     <table class="table table-striped table-hover">
         <thead class="thead">
             <tr>
@@ -239,5 +247,5 @@
         };
     </script>
 </body>
-
+@include('footer')
 </html>

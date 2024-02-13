@@ -15,6 +15,9 @@
             box-sizing: border-box;
             font-family: 'Montserrat', sans-serif;
         }
+        body{
+             min-height:90vh;
+        }
 
         .custom-btn-primary,
         .custom-btn-primary1 {
@@ -169,5 +172,7 @@
     </div>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+   
 </body>
+ @include('footer')
 </html>

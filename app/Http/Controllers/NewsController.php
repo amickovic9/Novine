@@ -80,7 +80,7 @@ class NewsController extends Controller
                 ->where('article_id', $article->id)
                 ->first();
     
-            $liked = $like ? true : false;
+            $likedArticle = $like ? true : false; 
     
             $query = Likes::query();
             $likeCountArticle = $query->where('article_id', $article->id)->count();
@@ -89,7 +89,7 @@ class NewsController extends Controller
                 ->where('article_id', $article->id)
                 ->first();
     
-            $disliked = $dislike ? true : false;
+            $dislikedArticle = $dislike ? true : false;
     
             $dislikeCountArticle = Dislikes::where('article_id', $article->id)->count();
             
@@ -99,7 +99,7 @@ class NewsController extends Controller
                     ->where('comment_id', $comment->id)
                     ->where('like', true)
                     ->first();
-                $liked = $like ? true : false;
+                $likedComm = $like ? true : false;
                 $likeCount = LikeDislikeComment::where('comment_id', $comment->id)
                     ->where('like', true)
                     ->count();
@@ -108,22 +108,22 @@ class NewsController extends Controller
                     ->where('comment_id', $comment->id)
                     ->where('dislike', true)
                     ->first();
-                $disliked = $dislike ? true : false;
+                $dislikedComm = $dislike ? true : false;
                 $dislikeCount = LikeDislikeComment::where('comment_id', $comment->id)
                     ->where('dislike', true)
                     ->count();
                 
-                $comment->liked = $liked;
+                $comment->liked = $likedComm;
                 $comment->likeCount = $likeCount;
-                $comment->disliked = $disliked;
+                $comment->disliked = $dislikedComm;
                 $comment->dislikeCount = $dislikeCount;
             }
             return view('article', [
                 'article' => $article,
                 'comments' => $comments,
-                'liked' => $liked,
+                'liked' => $likedArticle,
                 'likeCount' => $likeCountArticle,
-                'disliked' => $disliked,
+                'disliked' => $dislikedArticle,
                 'dislikeCount' => $dislikeCountArticle
             ]);
         

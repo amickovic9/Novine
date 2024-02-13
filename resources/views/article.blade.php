@@ -71,99 +71,7 @@
     .naslov {
          font-size: 1.5rem;
     }
-    .button {
-  position: relative;
-  padding: 10px 22px;
-  border-radius: 6px;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  background-color: #17a2b8;
-  transition: all 0.2s ease;
-}
 
-.button:active {
-  transform: scale(0.96);
-}
-
-.button:before,
-.button:after {
-  position: absolute;
-  content: "";
-  width: 150%;
-  left: 50%;
-  height: 100%;
-  transform: translateX(-50%);
-  z-index: -1000;
-  background-repeat: no-repeat;
-}
-
-.button:hover:before {
-  top: -70%;
-  background-image: radial-gradient(circle, #17a2b8 20%, transparent 20%),
-    radial-gradient(circle, transparent 20%, #17a2b8 20%, transparent 30%),
-    radial-gradient(circle, #17a2b8 20%, transparent 20%),
-    radial-gradient(circle, #17a2b8 20%, transparent 20%),
-    radial-gradient(circle, transparent 10%, #17a2b8 15%, transparent 20%),
-    radial-gradient(circle, #17a2b8 20%, transparent 20%),
-    radial-gradient(circle, #17a2b8 20%, transparent 20%),
-    radial-gradient(circle, #17a2b8 20%, transparent 20%),
-    radial-gradient(circle, #17a2b8 20%, transparent 20%);
-  background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%,
-    10% 10%, 18% 18%;
-  background-position: 50% 120%;
-  animation: greentopBubbles 0.6s ease;
-}
-
-@keyframes greentopBubbles {
-  0% {
-    background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%,
-      40% 90%, 55% 90%, 70% 90%;
-  }
-
-  50% {
-    background-position: 0% 80%, 0% 20%, 10% 40%, 20% 0%, 30% 30%, 22% 50%,
-      50% 50%, 65% 20%, 90% 30%;
-  }
-
-  100% {
-    background-position: 0% 70%, 0% 10%, 10% 30%, 20% -10%, 30% 20%, 22% 40%,
-      50% 40%, 65% 10%, 90% 20%;
-    background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
-  }
-}
-
-.button:hover::after {
-  bottom: -70%;
-  background-image: radial-gradient(circle, #17a2b8 20%, transparent 20%),
-    radial-gradient(circle, #17a2b8 20%, transparent 20%),
-    radial-gradient(circle, transparent 10%, #17a2b8 15%, transparent 20%),
-    radial-gradient(circle, #17a2b8 20%, transparent 20%),
-    radial-gradient(circle, #17a2b8 20%, transparent 20%),
-    radial-gradient(circle, #17a2b8 20%, transparent 20%),
-    radial-gradient(circle, #17a2b8 20%, transparent 20%);
-  background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 20% 20%, 18% 18%;
-  background-position: 50% 0%;
-  animation: greenbottomBubbles 0.6s ease;
-}
-
-@keyframes greenbottomBubbles {
-  0% {
-    background-position: 10% -10%, 30% 10%, 55% -10%, 70% -10%, 85% -10%,
-      70% -10%, 70% 0%;
-  }
-
-  50% {
-    background-position: 0% 80%, 20% 80%, 45% 60%, 60% 100%, 75% 70%, 95% 60%,
-      105% 0%;
-  }
-
-  100% {
-    background-position: 0% 90%, 20% 90%, 45% 70%, 60% 110%, 75% 80%, 95% 70%,
-      110% 10%;
-    background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
-  }
-}
 .likedislike {
     display: flex;
     justify-content: space-between;
@@ -217,16 +125,13 @@
     margin-left: auto;
     display: flex; 
 }
-
-.dugmici-lajk form {
-    display: flex;
-}
-
 .dugmici-lajk form button {
-    margin-left: 5px;
+    margin-left: 10px;
+    background-color: #17a2b8;
 }
-
-
+.dugmici-lajk form button:hover {
+   background-color:#2780ba;
+}
     </style>
 </head>
 <body>
@@ -261,7 +166,7 @@
 @endforeach
         <div class="tagovi">
         @foreach ($article->tags as $tag)
-            <a href="{{ route('home', ['pretraga' => $tag->name]) }}">{{ $tag->name }}</a>
+            <a href="{{ route('home', ['pretraga' => $tag->name]) }}">Tagovi:  {{ $tag->name }}</a>
         @endforeach
         </div> 
 
@@ -269,41 +174,44 @@
 
         <div class="likedislike">
         <div class="likedislike">
-    <div>
-        <form action="/article/{{ $article->id }}/like" method="POST">
-            @csrf
-            @if ($liked)
-                <button type="submit" class="like-button button">
-                    <i class="fa fa-thumbs-up" style="color: green;"></i> <!-- Zeleni prstić na gore ako je lajkovano -->
-                </button>
-            @else
-                <button type="submit" class="like-button button">
-                    <i class="fa fa-thumbs-up" style="color: white;"></i> <!-- Beli prstić na gore ako nije lajkovano -->
-                </button>
-            @endif
-        </form>
+        <div class="dugmici-lajk">
+    <form action="/article/{{ $article->id }}/like" method="POST">
+        @csrf
+        @if ($liked)
+            <button type="submit" class="like-button button">
+                <i class="fa fa-thumbs-up" style="color: green;"></i>
+            </button>
+        @else
+            <button type="submit" class="like-button button">
+                <i class="fa fa-thumbs-up" style="color: white;"></i> 
+            </button>
+        @endif
+    </form>
 
-        <form action="/article/{{ $article->id }}/dislike" method="POST">
-            @csrf
-            @if ($disliked)
-                <button type="submit" class="dislike-button button">
-                    <i class="fa fa-thumbs-down" style="color: red;"></i> <!-- Crveni prstić na dole ako je dislajkovano -->
-                </button>
-            @else
-                <button type="submit" class="dislike-button button">
-                    <i class="fa fa-thumbs-down" style="color: white;"></i> <!-- Beli prstić na dole ako nije dislajkovano -->
-                </button>
-            @endif
-        </form>
+    <form action="/article/{{ $article->id }}/dislike" method="POST">
+        @csrf
+        @if ($disliked)
+            <button type="submit" class="dislike-button button">
+                <i class="fa fa-thumbs-down" style="color: red;"></i> 
+            </button>
+        @else
+            <button type="submit" class="dislike-button button">
+                <i class="fa fa-thumbs-down" style="color: white;"></i> 
+            </button>
+        @endif
+    </form>
+</div>
+</div>
+ <div>
+        Svidjanja: {{ $likeCount }}
+        Nesvidjanja: {{ $dislikeCount }}
     </div>
+
 </div>
 
 
     
-    <div>
-        Svidjanja: {{ $likeCount }}
-        Nesvidjanja: {{ $dislikeCount }}
-    </div>
+   
 </div>
 
         <h1 class="mt-4 naslov">Komentari</h1>
@@ -330,13 +238,19 @@
           </div>
             <div class="dugmici-lajk">
             <form action="/like-comment/{{ $comment->id }}" method="POST">
-                @csrf
-                <button type="submit" class="btn btn-primary"style="background-color: #17a2b8; border-color: #17a2b8;"><i class="fa fa-thumbs-up" style="color: white;" >     {{ $comment->likeCount }}</i></button>
-            </form>
-            <form action="/dislike-comment/{{ $comment->id }}" method="POST">
-                @csrf
-                <button type="submit" class="btn btn-danger"><i class="fa fa-thumbs-down" style="color: white;">     {{ $comment->dislikeCount }}</i></button>
-              </form>
+    @csrf
+    <button type="submit" class="btn btn-primary" style="background-color: {{ $comment->liked ? 'green' : '#17a2b8' }}; border-color: #17a2b8;">
+        <i class="fa fa-thumbs-up" style="color: white;">{{ $comment->likeCount }}</i>
+    </button>
+</form>
+
+<form action="/dislike-comment/{{ $comment->id }}" method="POST">
+    @csrf
+    <button type="submit" class="btn btn-danger" style="background-color: {{ $comment->disliked ? 'red' : '' }};">
+        <i class="fa fa-thumbs-down" style="color: white;">{{ $comment->dislikeCount }}</i>
+    </button>
+</form>
+
           </div>
         </div>
     </div>
@@ -359,4 +273,5 @@
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
+@include('footer')
 </html>

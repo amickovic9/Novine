@@ -21,7 +21,7 @@
                     <label for="categoryName">Naziv Rubrike:</label>
                     <input type="text" class="form-control" id="categoryName" name="category" required>
                 </div>
-                <button type="submit" class="dodaj-btn">Dodaj Rubriku</button>
+                <button type="submit" class="dodaj-btn"><i class="fas fa-plus" style="color: white;"></i> Dodaj Rubriku</button>
             </form>
         </div>
     </div>

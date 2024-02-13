@@ -41,13 +41,16 @@
     <div class="container mt-4">
         <h1 class="naslov">Zahtevi za brisanje</h1>
         <form action="" method="GET" class="mb-3">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Pretraga po naslovu" name="search" value="{{ request()->get('search') }}">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="submit">Pretraži</button>
-                </div>
-            </div>
-        </form>
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Pretraga po naslovu" name="search" value="{{ request()->get('search') }}">
+        <div class="input-group-append">
+            <button class="btn btn-primary" type="submit" style="background-color: #2780ba;">
+                <i class="fas fa-search" style="color: white;"></i>
+            </button>
+        </div>
+    </div>
+    </form>
+
         <div class="col-md-8">
             @foreach ($deleteRequests as $deleteRequest)
                 <div class="card mb-3">

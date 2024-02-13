@@ -63,23 +63,29 @@
         </div>
     <form action="" method="GET">
         
-    <div class="form-row">
+    <form class="form-inline" action="" method="get">
+    <div class="form-row align-items-center">
         <div class="col-md-4 mb-3">
             <input type="text" class="form-control" name="naslov" placeholder="Naslov" value="{{ request('naslov') }}">
         </div>
         <div class="col-md-4 mb-3">
             <input type="text" class="form-control" name="rubrika" placeholder="Naziv rubrike" value="{{ request('rubrika') }}">
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-3 mb-3">
             <select name="draft" class="form-control">
                 <option value="" {{ (request('draft') == '') ? 'selected' : '' }}>Svi članci</option>
                 <option value="1" {{ (request('draft') == '1') ? 'selected' : '' }}>Samo draft članci</option>
                 <option value="0" {{ (request('draft') == '0') ? 'selected' : '' }}>Samo objavljeni članci</option>
             </select>
         </div>
+        <div class="col-md-1 mb-2">
+            <button type="submit" class="btn btn-success1" style="background-color: #17a2b8;">
+                <i class="fas fa-search" style="color: white;"></i>
+            </button>
+        </div>
     </div>
-    <button type="submit" class="btn-success1">Pretraži</button>
 </form>
+
 
     <div class="table-responsive">
         <table class="table table-striped table-hover">
@@ -135,4 +141,5 @@
     </div>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+@include('footer')
 </html>
