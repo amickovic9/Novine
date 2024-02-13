@@ -55,10 +55,10 @@
             </div>
             
             <div class="form-group">
-                <div id="tagsContainer"></div>
+                
                 <label for="tekst">Tagovi</label>
                 <textarea type="text" id="tagovi"  class="form-control" name="tags" id="tags">@foreach ($draft->tags as $tag ){{$tag->name}} @endforeach</textarea>
-            </div>
+            <div id="tagsContainer"></div></div>
             <div class="form-group">
                 <label for="rubrika">Odaberi rubriku</label>
                 <select name="rubrika" class="form-control">
