@@ -18,7 +18,7 @@
         background-color:#17a2b8 ;
     }
      .btn-success1:hover{
-            background-color: #365486;
+            background-color: #2780ba;
             color: white;
             transform: scale(1.1);
             text-decoration: none;
@@ -34,7 +34,7 @@
         padding-top:10px;
     }
     .thead { 
-            background: #365486;
+            background: #2780ba;
             color:white; 
         }
     input[type="checkbox"] {
@@ -67,7 +67,29 @@
         <a href="/cms-editor/create" class="btn-success1">Kreiraj objavu</a>
     </div>
 
-    <div class="container mt-4">
+    <div class="container mt-4 md-3">
+    <form class="form-inline" action="" method="get">
+    <div class="form-group mr-2">
+        <input type="text" class="form-control" name="naslov" value="{{ request()->input('naslov') }}" placeholder="Unesite naslov">
+    </div>
+    <div class="form-group mr-2">
+        <select class="form-control" name="draft">
+            <option value="">Sve objave</option>
+            <option value="0" {{ request()->input('draft') === '0' ? 'selected' : '' }}>Članak</option>
+            <option value="1" {{ request()->input('draft') === '1' ? 'selected' : '' }}>Draft</option>
+        </select>
+    </div>
+    <div class="form-group mr-2">
+        <select class="form-control" name="rubrika">
+            <option value="">Sve kategorije</option>
+            @foreach ($categories as $category)
+                <option value="{{ $category->id }}" {{ request()->input('rubrika') == $category->id ? 'selected' : '' }}>{{ $category->category }}</option>
+            @endforeach
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Pretraži</button>
+</form>
+
         <div class="table-responsive">
             <table class="table table-striped table-hover">
                 <thead class="thead">
@@ -114,6 +136,20 @@
     </div>
 
     <div class="container mt-4">
+    <form action="" method="GET">
+    <div class="form-row">
+        <div class="col-md-4 mb-3">
+            <label for="searchName">Ime:</label>
+            <input type="text" class="form-control"  name="name" value="{{ request()->input('name') }}">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="searchEmail">Email:</label>
+            <input type="text" class="form-control" name="email" value="{{ request()->input('email') }}">
+        </div>
+    </div>
+    <button class="btn btn-primary" type="submit">Pretraži</button>
+</form>
+
         <table class="table">
             <thead class="thead">
                 <tr>

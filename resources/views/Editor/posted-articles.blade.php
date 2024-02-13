@@ -60,10 +60,10 @@
                     @endif
                 @endforeach
             </div>
-            
+            <button type="submit" class="btn btn-primary mb-2" style="background-color: #2780ba; border-color: #2780ba;">Sačuvaj</button>
+
         </form>
         <div class="mt-3">
-            <button type="submit" class="btn btn-primary mb-2" style="background-color: #365486; border-color: #365486;">Sačuvaj</button>
             <a href="/cms-editor/article/{{$article->id}}/draft" class="btn btn-danger mb-2">Vrati u draftove</a>
         </div>
     </div>

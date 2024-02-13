@@ -8,19 +8,8 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-body{
-background: linear-gradient(to bottom, #8CB9BD,#17a2b8);
-min-height: 90vh;
-background-repeat: no-repeat;
-background-size: cover;
-background-position: center;
-display: flex;
-align-items: center;
-justify-content: center;
-flex-direction: column;
-height: 120vh;
-margin-top: 0px !important;
-}
+
+
 
 .container{
 background-color: #fff;
@@ -29,8 +18,9 @@ box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
 position: relative;
 overflow: hidden;
 width: 40%;
-max-width: 90%;
+max-width: 70%;
 min-height: 450px;
+margin-top:20px;
 }
 
 .container p{
@@ -68,7 +58,7 @@ cursor: pointer;
 transition: all 0.3s ease-in-out;
 }
 .sign-in button:hover{ 
-background-color: #365486;
+background-color: #2780ba;
 }
 
 .sign-up button{
@@ -164,7 +154,7 @@ border-radius: 0 150px 100px 0;
 .toggle{
 background-color: #17a2b8;
 height: 100%;
-background: linear-gradient(to right, #365486,#17a2b8);
+background: linear-gradient(to right, #2780ba,#17a2b8);
 color: #fff;
 position: relative;
 left: -100%;

@@ -25,7 +25,7 @@
         }
 
         .custom-btn-primary:hover {
-            background-color: #365486;
+            background-color: #2780ba;
             color:white;
             transform:scale(1.1);
             text-decoration:none

@@ -27,17 +27,21 @@
         }
 
         .custom-btn-primary:hover {
-            background-color: #365486;
+            background-color: #2780ba;
             color: white;
             transform: scale(1.03);
             text-decoration: none
         }
 
         .custom-btn-primary1:hover {
-            background-color: #365486;
+            background-color: #2780ba;
             color: white;
             transform: scale(1.03);
             text-decoration: none
+        }
+        .card-title  { 
+            height: 6rem; 
+            overflow:hidden;
         }
 
         .card-title:hover {
@@ -72,12 +76,13 @@
         }
 
         .page-link:hover {
-            color: #365486;
+            color: #2780ba;
         }
         .image-container {
              position: relative;
-             height: 220px;
+             height: 12rem;
              overflow: hidden;
+             
             }
 
         .category-badge {
@@ -85,7 +90,8 @@
             bottom: 5px;
             right: 5px;
             padding: 5px 10px;
-            background-color: rgba(0, 0, 0, 0.5); 
+            background-color: rgba(39,128,186, 0.6);
+ 
             color: #fff;
             font-size: 12px;
             border-radius: 12px 3px;
@@ -138,8 +144,13 @@
             </li>
         @endif
         
-        @for ($i = 1; $i <= $news->lastPage(); $i++)
-            <li class="page-item {{ $i == $news->currentPage() ? 'active' : '' }}">
+        @php
+            $currentPage = $news->currentPage();
+            $lastPage = $news->lastPage();
+        @endphp
+        
+        @for ($i = max(1, $currentPage - 1); $i <= min($lastPage, $currentPage + 1); $i++)
+            <li class="page-item {{ $i == $currentPage ? 'active' : '' }}">
                 <a class="page-link" style="background-color: #17a2b8; border-color: #17a2b8; color:white;" href="{{ $news->url($i) }}">{{ $i }}</a>
             </li>
         @endfor
@@ -153,6 +164,7 @@
         @endif
     </ul>
 </nav>
+
 
     </div>
 

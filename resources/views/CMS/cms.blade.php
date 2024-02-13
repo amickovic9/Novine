@@ -39,14 +39,14 @@
         }
 
         .custom-btn-primary:hover {
-            background-color: #365486;
+            background-color: #2780ba;
             color:white;
             transform:scale(1.01);
             text-decoration:none;
 
         }
         .custom-btn-secondary {
-            background-color: #365486;
+            background-color: #2780ba;
             color:white;
             padding: 9px 15px;
             border-radius: 5px; 
@@ -62,7 +62,7 @@
             text-decoration:none
         }
         .thead { 
-            background-color: #365486;
+            background-color: #2780ba;
             color: white;
         }
         .td-naslov {
@@ -214,6 +214,30 @@
 </div>
 
     <script src="/js/script.js"></script>
+    <script>
+        function toggleEditUserContainer() {
+            document.getElementById('container-edit-user').style.display = 'block';
+            document.getElementById('table-article').style.display = 'none';
+            localStorage.setItem('activeTab', 'container-edit-user');
+        }
+
+        function toggleTableArticle() {
+            document.getElementById('table-article').style.display = 'block';
+            document.getElementById('container-edit-user').style.display = 'none';
+            localStorage.setItem('activeTab', 'table-article');
+        }
+
+        window.onload = function() {
+            var activeTab = localStorage.getItem('activeTab');
+            if (activeTab) {
+                if (activeTab === 'container-edit-user') {
+                    toggleEditUserContainer();
+                } else if (activeTab === 'table-article') {
+                    toggleTableArticle();
+                }
+            }
+        };
+    </script>
 </body>
 
 </html>

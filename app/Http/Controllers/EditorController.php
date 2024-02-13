@@ -71,15 +71,38 @@ class EditorController extends Controller
         $this->deleteArticle($article);
         return redirect('/cms-editor')->with('success', 'Uspesno ste izbrisali objavu');
     }
-    public function showCMS()
+    public function showCMS(Request $request)
     {
         $user = Auth::user();
         $categories = $user->categories;
         $categoryIds = $categories->pluck('id')->toArray();
         $updateRequest = ArticleEditRequests::whereIn('category_id', $categoryIds)->count();
         $deleteRequestsCount = ArticleDeleteRequest::whereIn('category_id', $categoryIds)->count();
-        $articles = News::whereIn('rubrika', $categoryIds)->orderBy('created_at', 'desc')->get();
-        $journalists = User::where('role', 2)->get();
+        $searchName = $request->input('name');
+        $searchEmail = $request->input('email');
+        $journalistsQuery = User::where('role', 2);
+        if ($request->has('name')) {
+            $journalistsQuery->where('name', 'like', '%' . $searchName . '%');
+        }
+        if ($request->has('email')) {
+            $journalistsQuery->where('email', 'like', '%' . $searchEmail . '%');
+        }
+        $journalists = $journalistsQuery->get();
+    
+        $rubrika = $request->input('rubrika');
+        $naslov = $request->input('naslov');
+        $draft = $request->input('draft');
+        $articlesQuery = News::whereIn('rubrika', $categoryIds)->orderBy('created_at', 'desc');
+        if (!empty($naslov)) {
+            $articlesQuery->where('naslov', 'like', '%' . $naslov . '%');
+        }
+        if (!empty($rubrika)) {
+            $articlesQuery->where('rubrika', $rubrika);
+        }
+        if (!is_null($draft)) {
+            $articlesQuery->where('draft', $draft);
+        }
+        $articles = $articlesQuery->get();
         foreach ($journalists as $journalist) {
             $journalistCategories = $journalist->categories;
             $journalistCategoryIds = $journalistCategories->pluck('id')->toArray();
@@ -94,11 +117,6 @@ class EditorController extends Controller
         ]);
     }
 
-    public function showDrafts(Category $category)
-    {
-        $drafts = $category->news()->where('draft', 1)->get();
-        return view('editor.drafts', ['drafts' => $drafts, 'category' => $category]);
-    }
     public function showEditDraft(News $draft)
     {
         if (in_array($draft->rubrika, Auth::user()->categories()->pluck('categories.id')->toArray()) && $draft->draft == 1) {

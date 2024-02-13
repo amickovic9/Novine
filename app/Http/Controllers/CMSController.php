@@ -137,13 +137,20 @@ class CMSController extends Controller
         return view('cms.categories', ['categories' => $categories]);
     }
     public function addCategory(Request $request)
-    {
+{
+    try {
         $field = $request->validate([
-            'category' => 'required',
+            'category' => 'required|unique:categories',
         ]);
+        
         Category::create($field);
+        
         return back()->with('success', 'Uspesno ste dodali novu rubriku!');
+    } catch (\Exception $e) {
+        return back()->with('danger', 'Kategorija sa tim imenom vec postoji! ');
     }
+}
+
     public function editCategory(Category $category, Request $request)
     {
         $field = $request->validate([

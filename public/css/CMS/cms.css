@@ -39,7 +39,7 @@ header {
 .dugme:hover { 
     transition: ease-in-out 0.3s;
     text-decoration: none;
-    background-color: #365486;
+    background-color: #2780ba;
     ;
     color: white;
     transform: scale(1.02);

@@ -22,12 +22,12 @@
      font-family: 'Montserrat', sans-serif;
 }
       .navbar { 
-        background: radial-gradient(circle, #365486, #17a2b8);
+        background: #17a2b8;
 
       }
       .nav-link {
-        background-color:#365486;
-        border: 1px solid #365486;
+        background-color:#2780ba;
+        border: 1px solid #2780ba;
         color:white;
         margin:5px 10px;
         padding: 10px 15px;

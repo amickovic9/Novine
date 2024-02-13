@@ -74,7 +74,7 @@
             padding: 25px 15px;
             width: 25%;
             height: 30vh;
-            background: linear-gradient(to right, #365486,#17a2b8);
+            background: linear-gradient(to right, #2780ba,#17a2b8);
 
         }
         .services ul li:hover { 

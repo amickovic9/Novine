@@ -31,7 +31,7 @@
         }
 
         .custom-btn-primary:hover {
-            background-color: #365486;
+            background-color: #2780ba;
             color:white;
             transform:scale(1.1);
             text-decoration:none
@@ -267,23 +267,45 @@
 
        
 
-      <div class="likedislike">
-        <div>
-        @if ($liked)
-            <a href="/article/{{$article->id}}/remove-like" class="dislike-button button"><i class="fa fa-thumbs-down" style="color: white;"></i></a>
-        @else
-            <a href="/article/{{$article->id}}/like" class="like-button button" ><i class="fa fa-thumbs-up" style="color: white;"></i></a> 
-        @endif
+        <div class="likedislike">
+        <div class="likedislike">
+    <div>
+        <form action="/article/{{ $article->id }}/like" method="POST">
+            @csrf
+            @if ($liked)
+                <button type="submit" class="like-button button">
+                    <i class="fa fa-thumbs-up" style="color: green;"></i> <!-- Zeleni prstić na gore ako je lajkovano -->
+                </button>
+            @else
+                <button type="submit" class="like-button button">
+                    <i class="fa fa-thumbs-up" style="color: white;"></i> <!-- Beli prstić na gore ako nije lajkovano -->
+                </button>
+            @endif
+        </form>
 
-        @if ($disliked)
-            <a href="/article/{{$article->id}}/remove-dislike" class="like-button button"><i class="fa fa-thumbs-up" style="color: white;"></i></a>
-        @else
-            <a href="/article/{{$article->id}}/dislike" class="dislike-button button" ><i class="fa fa-thumbs-down" style="color: white;"></i></a> 
-        @endif
-        </div>
-          Svidjanja: {{$likeCount}}
-          Nesvidjanja: {{$dislikeCount}} 
-      </div>
+        <form action="/article/{{ $article->id }}/dislike" method="POST">
+            @csrf
+            @if ($disliked)
+                <button type="submit" class="dislike-button button">
+                    <i class="fa fa-thumbs-down" style="color: red;"></i> <!-- Crveni prstić na dole ako je dislajkovano -->
+                </button>
+            @else
+                <button type="submit" class="dislike-button button">
+                    <i class="fa fa-thumbs-down" style="color: white;"></i> <!-- Beli prstić na dole ako nije dislajkovano -->
+                </button>
+            @endif
+        </form>
+    </div>
+</div>
+
+
+    
+    <div>
+        Svidjanja: {{ $likeCount }}
+        Nesvidjanja: {{ $dislikeCount }}
+    </div>
+</div>
+
         <h1 class="mt-4 naslov">Komentari</h1>
         <form action="/add-comment" method="post" class="mt-3">
             @csrf

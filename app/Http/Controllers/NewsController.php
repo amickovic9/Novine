@@ -83,7 +83,7 @@ class NewsController extends Controller
             $liked = $like ? true : false;
     
             $query = Likes::query();
-            $likeCount = $query->where('article_id', $article->id)->count();
+            $likeCountArticle = $query->where('article_id', $article->id)->count();
     
             $dislike = Dislikes::where('ip_address', $address)
                 ->where('article_id', $article->id)
@@ -91,7 +91,7 @@ class NewsController extends Controller
     
             $disliked = $dislike ? true : false;
     
-            $dislikeCount = Dislikes::where('article_id', $article->id)->count();
+            $dislikeCountArticle = Dislikes::where('article_id', $article->id)->count();
             
             $comments = $article->comments()->get();
             foreach ($comments as $comment) {
@@ -122,29 +122,26 @@ class NewsController extends Controller
                 'article' => $article,
                 'comments' => $comments,
                 'liked' => $liked,
-                'likeCount' => $likeCount,
+                'likeCount' => $likeCountArticle,
                 'disliked' => $disliked,
-                'dislikeCount' => $dislikeCount
+                'dislikeCount' => $dislikeCountArticle
             ]);
         
     }
     
 
-
-    public function like(News $article)
+    public function likeArticle(Request $request, News $article)
 {
-   
-        $address = request()->ip();
+    $ipAddress = $request->ip();
 
-        $existingLike = Likes::where('ip_address', $address)
-            ->where('article_id', $article->id)
-            ->first();
+    $existingLike = Likes::where('ip_address', $ipAddress)
+        ->where('article_id', $article->id)
+        ->first();
 
-        if ($existingLike) {
-            $existingLike->delete();
-        }
-
-        $existingDislike = Dislikes::where('ip_address', $address)
+    if ($existingLike) {
+        $existingLike->delete();
+    } else {
+        $existingDislike = Dislikes::where('ip_address', $ipAddress)
             ->where('article_id', $article->id)
             ->first();
 
@@ -152,27 +149,26 @@ class NewsController extends Controller
             $existingDislike->delete();
         }
 
-        $fields['ip_address'] = $address;
+        $fields['ip_address'] = $ipAddress;
         $fields['article_id'] = $article->id;
         Likes::create($fields);
-        return back();
-    
+    }
+
+    return back();
 }
 
-    public function dislike(News $article)
+public function dislikeArticle(Request $request, News $article)
 {
-    
-        $address = request()->ip();
+    $ipAddress = $request->ip();
 
-        $existingDislike = Dislikes::where('ip_address', $address)
-            ->where('article_id', $article->id)
-            ->first();
+    $existingDislike = Dislikes::where('ip_address', $ipAddress)
+        ->where('article_id', $article->id)
+        ->first();
 
-        if ($existingDislike) {
-            $existingDislike->delete();
-        }
-
-        $existingLike = Likes::where('ip_address', $address)
+    if ($existingDislike) {
+        $existingDislike->delete();
+    } else {
+        $existingLike = Likes::where('ip_address', $ipAddress)
             ->where('article_id', $article->id)
             ->first();
 
@@ -180,35 +176,31 @@ class NewsController extends Controller
             $existingLike->delete();
         }
 
-        $fields['ip_address'] = $address;
+        $fields['ip_address'] = $ipAddress;
         $fields['article_id'] = $article->id;
         Dislikes::create($fields);
-        return back();
+    }
 
-    
+    return back();
 }
 
-    public function removeLike(News $article)
-    {
-       
-            $ip = request()->ip();
-            $existingLike = Likes::where('article_id', $article->id)->where('ip_address', $ip)->first();
-            if ($existingLike) {
-                $existingLike->delete();
-            }
-            return back();
-        
+public function removeLikeArticle(Request $request, News $article)
+{
+    $ipAddress = $request->ip();
+    $existingLike = Likes::where('article_id', $article->id)->where('ip_address', $ipAddress)->first();
+    if ($existingLike) {
+        $existingLike->delete();
     }
-    public function removeDislike(News $article)
-    {
-        $ip = request()->ip();
-        $existingDislike = Dislikes::where('article_id', $article->id)->where('ip_address', $ip)->first();
-        
-        if ($existingDislike) {
-            $existingDislike->delete();
-        }
+    return back();
+}
 
-        return back();
+public function removeDislikeArticle(Request $request, News $article)
+{
+    $ipAddress = $request->ip();
+    $existingDislike = Dislikes::where('article_id', $article->id)->where('ip_address', $ipAddress)->first();
+    if ($existingDislike) {
+        $existingDislike->delete();
     }
-
+    return back();
+}
 }

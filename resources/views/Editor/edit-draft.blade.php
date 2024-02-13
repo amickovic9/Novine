@@ -66,7 +66,7 @@
                     @endif
                 @endforeach
             </div>
-            <button type="submit" class="btn btn-primary mb-2" style="background-color: #365486; border-color: #365486;">Sačuvaj</button>
+            <button type="submit" class="btn btn-primary mb-2" style="background-color: #2780ba; border-color: #2780ba;">Sačuvaj</button>
         </form>
         
     </div>

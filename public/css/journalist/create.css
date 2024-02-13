@@ -58,7 +58,7 @@ select {
 }
 
 .btn-create:hover {
-    background-color: #365486;
+    background-color: #2780ba;
     text-decoration: none;
     color: white;
     transform: scale(1.1); 

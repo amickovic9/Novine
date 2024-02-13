@@ -63,7 +63,7 @@
             @if ($updateRequestSent)
                 <p>Zahtev za izmenu je već poslat!</p>
             @else
-                <button type="submit" class="btn btn-primary mb-2"  style="background-color: #365486; border-color: #365486;">Podnesi zahtev za izmenu</button>   
+                <button type="submit" class="btn btn-primary mb-2"  style="background-color: #2780ba; border-color: #2780ba;">Podnesi zahtev za izmenu</button>   
             @endif
         </form>
         

@@ -32,7 +32,7 @@
     }
 
         .btn-success1:hover{
-            background-color: #365486;
+            background-color: #2780ba;
             color: white;
             transform: scale(1.1);
             text-decoration: none;
@@ -48,7 +48,7 @@
             margin-top: 20px;
         }
         .thead-dark1 { 
-            background: #365486;
+            background: #2780ba;
             color:white; 
         }
 </style> 
@@ -99,7 +99,8 @@
                     <tr>
                         <td>{{ $article->id }}</td>
                         <td>
-                            <img src="{{ asset('storage/naslovne/' . $article->naslovna) }}" alt="" class="img-thumbnail" style="max-width: 100px;">
+                        <img src="{{ asset('storage/naslovne/' . $article->naslovna) }}" alt="Slika" class="img-thumbnail" style="max-width: 100px;">
+
                         </td>
                         <td>{{ $article->naslov }}</td>
                         <td>{{ $article->category->category }}</td>
@@ -113,13 +114,13 @@
                                 @if ($article->deleteRequestSent)
                                     <p class="text-danger">Zahtev za brisanje je već poslat!</p>
                                 @else
-                                    <a href="/cms-journalist/article/{{$article->id}}/request-delete" class="btn btn-danger btn-img-dimensions">Zahtev za brisanje</a>
+                                    <a href="/cms-journalist/article/{{$article->id}}/request-delete" class="btn-success2">Zahtev za brisanje</a>
                                 @endif
                                 
                                 @if ($article->updateRequestSent)
                                     <p class="text-danger">Zahtev za izmenu je već poslat!</p>
                                 @else
-                                    <a href="/cms-journalist/article/{{$article->id}}" class="btn btn-danger btn-img-dimensions">Zahtev za izmenu</a>
+                                    <a href="/cms-journalist/article/{{$article->id}}" class="btn-success2">Zahtev za izmenu</a>
                                 @endif
                             @endif
                         </td>

@@ -71,7 +71,7 @@ class UserController extends Controller
             });
         }
 
-        $news = $query->orderBy('created_at', 'desc')->paginate(4);
+        $news = $query->orderBy('created_at', 'desc')->paginate(12);
 
         return view('home', ['news' => $news, 'categories' => $categories]);
     }
@@ -116,7 +116,7 @@ class UserController extends Controller
     
     public function dislikeComment(Comment $comment)
     {
-        $ipAddress = request()->ip(); // Dohvati IP adresu korisnika
+        $ipAddress = request()->ip(); 
         $existingLike = LikeDislikeComment::where('comment_id', $comment->id)
             ->where('ip_address', $ipAddress)
             ->first();
