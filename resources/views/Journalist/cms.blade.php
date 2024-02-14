@@ -134,6 +134,36 @@
                 @endforeach
             </tbody>
         </table>
+        <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        @if ($articles->previousPageUrl())
+            <li class="page-item">
+                <a class="page-link" style="background-color: #17a2b8; border-color: #17a2b8; color:white;" href="{{ $articles->previousPageUrl() }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo; Nazad</span>
+                </a>
+            </li>
+        @endif
+
+        @php
+            $currentPageArticles = $articles->currentPage();
+            $lastPageArticles = $articles->lastPage();
+        @endphp
+
+        @for ($i = max(1, $currentPageArticles - 1); $i <= min($lastPageArticles, $currentPageArticles + 1); $i++)
+            <li class="page-item {{ $i == $currentPageArticles ? 'active' : '' }}">
+                <a class="page-link" style="background-color: #17a2b8; border-color: #17a2b8; color:white;" href="{{ $articles->url($i) }}">{{ $i }}</a>
+            </li>
+        @endfor
+
+        @if ($articles->nextPageUrl())
+            <li class="page-item">
+                <a class="page-link" style="background-color: #17a2b8; border-color: #17a2b8; color:white;" href="{{ $articles->nextPageUrl() }}" aria-label="Next">
+                    <span aria-hidden="true"> Napred &raquo;</span>
+                </a>
+            </li>
+        @endif
+    </ul>
+</nav>
     </div>
 </div>
 

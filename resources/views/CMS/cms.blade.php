@@ -74,6 +74,7 @@
 
 
     <a href="/cms/create-user" class="custom-btn-primary">Registruj korisnika</a>
+    
     <table class="table mt-4">
         <thead class="thead">
             <tr>
@@ -100,6 +101,36 @@
             @endforeach
         </tbody>
     </table>
+    <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        @if ($users->previousPageUrl())
+            <li class="page-item">
+                <a class="page-link" style="background-color: #17a2b8; border-color: #17a2b8; color:white;" href="{{ $users->previousPageUrl() }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo; Nazad</span>
+                </a>
+            </li>
+        @endif
+        
+        @php
+            $currentPageUsers = $users->currentPage();
+            $lastPageUsers = $users->lastPage();
+        @endphp
+        
+        @for ($i = max(1, $currentPageUsers - 1); $i <= min($lastPageUsers, $currentPageUsers + 1); $i++)
+            <li class="page-item {{ $i == $currentPageUsers ? 'active' : '' }}">
+                <a class="page-link" style="background-color: #17a2b8; border-color: #17a2b8; color:white;" href="{{ $users->url($i) }}">{{ $i }}</a>
+            </li>
+        @endfor
+        
+        @if ($users->nextPageUrl())
+            <li class="page-item">
+                <a class="page-link" style="background-color: #17a2b8; border-color: #17a2b8; color:white;" href="{{ $users->nextPageUrl() }}" aria-label="Next">
+                    <span aria-hidden="true"> Napred &raquo;</span>
+                </a>
+            </li>
+        @endif
+    </ul>
+</nav>
 </div>
 
 <div id="table-article" class="container" style="display: none;">
@@ -176,6 +207,36 @@
             @endforeach
         </tbody>
     </table>
+    <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        @if ($posts->previousPageUrl())
+            <li class="page-item">
+                <a class="page-link" style="background-color: #17a2b8; border-color: #17a2b8; color:white;" href="{{ $posts->previousPageUrl() }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo; Nazad</span>
+                </a>
+            </li>
+        @endif
+        
+        @php
+            $currentPagePosts = $posts->currentPage();
+            $lastPagePosts = $posts->lastPage();
+        @endphp
+        
+        @for ($i = max(1, $currentPagePosts - 1); $i <= min($lastPagePosts, $currentPagePosts + 1); $i++)
+            <li class="page-item {{ $i == $currentPagePosts ? 'active' : '' }}">
+                <a class="page-link" style="background-color: #17a2b8; border-color: #17a2b8; color:white;" href="{{ $posts->url($i) }}">{{ $i }}</a>
+            </li>
+        @endfor
+        
+        @if ($posts->nextPageUrl())
+            <li class="page-item">
+                <a class="page-link" style="background-color: #17a2b8; border-color: #17a2b8; color:white;" href="{{ $posts->nextPageUrl() }}" aria-label="Next">
+                    <span aria-hidden="true"> Napred &raquo;</span>
+                </a>
+            </li>
+        @endif
+    </ul>
+</nav>
 </div>
 
     <script src="/js/script.js"></script>

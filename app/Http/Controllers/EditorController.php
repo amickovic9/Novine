@@ -21,12 +21,12 @@ class EditorController extends Controller
 
         if ($article->comments()->exists()) {
             $comments = $article->comments()->get();
-        
+
             foreach ($comments as $comment) {
                 $comment->likesDislikes()->delete();
             }
         }
-        
+
 
 
 
@@ -41,21 +41,21 @@ class EditorController extends Controller
         if ($article->tags()->exists()) {
             $article->tags()->detach();
         }
-        if($article->likes()->exists()){
+        if ($article->likes()->exists()) {
             $article->likes()->delete();
         }
-        if($article->dislikes()->exists()){
+        if ($article->dislikes()->exists()) {
             $article->dislikes()->delete();
         }
 
-        
+
         if ($article->naslovna != null) {
             $oldImagePath = storage_path('app/public/naslovne/' . $article->naslovna);
             if (file_exists($oldImagePath)) {
                 unlink($oldImagePath);
             }
         }
-        
+
 
         foreach ($article->gallery as $galleryItem) {
             $imagePath = storage_path('app/public/gallery/' . $galleryItem->photo_video);
@@ -87,8 +87,8 @@ class EditorController extends Controller
         if ($request->has('email')) {
             $journalistsQuery->where('email', 'like', '%' . $searchEmail . '%');
         }
-        $journalists = $journalistsQuery->get();
-    
+        $journalists = $journalistsQuery->paginate(10);
+
         $rubrika = $request->input('rubrika');
         $naslov = $request->input('naslov');
         $draft = $request->input('draft');
@@ -102,12 +102,14 @@ class EditorController extends Controller
         if (!is_null($draft)) {
             $articlesQuery->where('draft', $draft);
         }
-        $articles = $articlesQuery->get();
+        $articles = $articlesQuery->paginate(10);
+
         foreach ($journalists as $journalist) {
             $journalistCategories = $journalist->categories;
             $journalistCategoryIds = $journalistCategories->pluck('id')->toArray();
             $journalist['categoryIds'] = $journalistCategoryIds;
         }
+
         return view('editor.cms', [
             'categories' => $categories,
             'articles' => $articles,
@@ -117,11 +119,12 @@ class EditorController extends Controller
         ]);
     }
 
+
     public function showEditDraft(News $draft)
     {
         if (in_array($draft->rubrika, Auth::user()->categories()->pluck('categories.id')->toArray()) && $draft->draft == 1) {
             $categories = Auth::user()->categories;
-            return view('editor.edit-draft', ['draft' => $draft,'categories'=>$categories]);
+            return view('editor.edit-draft', ['draft' => $draft, 'categories' => $categories]);
         } else {
             return redirect('/')->with('success', 'Mozete upravljati samo vasim draftovima');
         }
@@ -152,7 +155,7 @@ class EditorController extends Controller
             $fields = $request->validate([
                 'tekst' => 'required',
                 'naslovna' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-                'files' =>'',
+                'files' => '',
                 'naslov' => 'required',
                 'rubrika' => 'required',
                 'tags' => 'required'
@@ -176,11 +179,11 @@ class EditorController extends Controller
                     Storage::delete('public/gallery/' . $item->photo_video);
                     $item->delete();
                 }
-    
+
                 foreach ($request->file('files') as $file) {
                     $filename = time() . '_' . $file->getClientOriginalName();
                     $file->storeAs('public/gallery', $filename);
-    
+
                     $draft->gallery()->create([
                         'photo_video' => $filename
                     ]);
@@ -208,7 +211,7 @@ class EditorController extends Controller
         if (in_array($article->rubrika, Auth::user()->categories()->pluck('categories.id')->toArray()) && $article->draft == 0) {
             $categories = Auth::user()->categories;
 
-            return view('editor.posted-articles', ['article' => $article,'categories' => $categories]);
+            return view('editor.posted-articles', ['article' => $article, 'categories' => $categories]);
         } else  return redirect('/')->with('danger', 'Mozete upravljati samo vasom rubrikom');
     }
     public function hideArticle(News $article)
@@ -273,18 +276,17 @@ class EditorController extends Controller
     public function allowEdit(ArticleEditRequests $editRequest)
     {
         $article = $editRequest->news;
-    
+
         if ($this->articleCheck($article)) {
             if ($editRequest->naslovna != null) {
                 $oldImagePath = storage_path('app/public/naslovne/' . $article->naslovna);
                 if (file_exists($oldImagePath)) {
                     unlink($oldImagePath);
                 }
-            }else{
-                $editRequest->naslovna= $article->naslovna;
-
+            } else {
+                $editRequest->naslovna = $article->naslovna;
             }
-    
+
             $article->gallery->each(function ($galleryItem) {
                 $galleryImagePath = storage_path('app/public/gallery/' . $galleryItem->photo_video);
                 if (file_exists($galleryImagePath)) {
@@ -292,7 +294,7 @@ class EditorController extends Controller
                 }
                 $galleryItem->delete();
             });
-    
+
             if ($editRequest->gallery()->exists()) {
                 $newGalleryItems = $editRequest->gallery()->get();
                 foreach ($newGalleryItems as $newGalleryItem) {
@@ -302,34 +304,34 @@ class EditorController extends Controller
                     ]);
                 }
             }
-    
+
             $article->update($editRequest->toArray());
-    
+
             $tags = $editRequest->tags;
             $article->tags()->sync($tags);
-    
+
             $editRequest->tags()->detach();
-    
+
             $editRequest->delete();
-    
+
             return back()->with('success', 'Uspešno ste odobrili izmenu članka!');
         }
     }
-    
+
     public function declineEdit(ArticleEditRequests $editRequest)
     {
         $article = $editRequest->news;
-    
+
         if ($this->articleCheck($article)) {
             $editRequest->tags()->detach();
-    
+
             if ($editRequest->naslovna != null) {
                 $filePath = storage_path('app/public/naslovne/' . $editRequest->naslovna);
                 if (file_exists($filePath)) {
                     unlink($filePath);
                 }
             }
-    
+
             $editRequest->gallery->each(function ($galleryItem) {
                 $galleryImagePath = storage_path('app/public/gallery/' . $galleryItem->photo_video);
                 if (file_exists($galleryImagePath)) {
@@ -337,13 +339,13 @@ class EditorController extends Controller
                 }
                 $galleryItem->delete();
             });
-    
+
             $editRequest->delete();
-    
+
             return back()->with('success', 'Uspešno ste odbili izmenu članka!');
         }
     }
-    
+
     public function updateCategories(User $user, Request $request)
     {
         $userCategories = $user->categories()->pluck('categories.id')->toArray();

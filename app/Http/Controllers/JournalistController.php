@@ -40,7 +40,7 @@ class JournalistController extends Controller
             $query->where('draft', $request->input('draft'));
         }
 
-        $articles = $query->orderBy('created_at', 'desc')->get();
+        $articles = $query->orderBy('created_at', 'desc')->paginate(10);
 
         foreach ($articles as $article) {
             $deleteRequestSent = !is_null($article->deleteRequest);
@@ -52,38 +52,39 @@ class JournalistController extends Controller
         return view('journalist.cms', ['articles' => $articles]);
     }
 
-   
+
+
     public function showCreatePost()
     {
         $categories = Auth::user()->categories;
         return view('journalist.create-post', ['categories' => $categories]);
     }
     public function deletePost(News $article)
-{
-    if ($article->user_id == Auth::user()->id && $article->draft == 1) {
-        if ($article->naslovna != null) {
-            $oldImagePath = storage_path('app/public/naslovne/' . $article->naslovna);
-            if (file_exists($oldImagePath)) {
-                unlink($oldImagePath);
+    {
+        if ($article->user_id == Auth::user()->id && $article->draft == 1) {
+            if ($article->naslovna != null) {
+                $oldImagePath = storage_path('app/public/naslovne/' . $article->naslovna);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
             }
-        }
 
-        foreach ($article->gallery as $galleryItem) {
-            $imagePath = storage_path('app/public/gallery/' . $galleryItem->photo_video);
-            if (file_exists($imagePath)) {
-                unlink($imagePath);
+            foreach ($article->gallery as $galleryItem) {
+                $imagePath = storage_path('app/public/gallery/' . $galleryItem->photo_video);
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+                $galleryItem->delete();
             }
-            $galleryItem->delete();
+
+            $article->tags()->detach();
+            $article->delete();
+
+            return redirect('/cms-journalist')->with('success', 'Uspešno ste izbrisali draft!');
+        } else {
+            return redirect('/')->with('success', 'Možete upravljati samo vašim draftovima!');
         }
-
-        $article->tags()->detach();
-        $article->delete();
-
-        return redirect('/cms-journalist')->with('success', 'Uspešno ste izbrisali draft!');
-    } else {
-        return redirect('/')->with('success', 'Možete upravljati samo vašim draftovima!');
     }
-}
 
     public function showEditPost(News $article)
     {
@@ -131,11 +132,11 @@ class JournalistController extends Controller
                     Storage::delete('public/gallery/' . $item->photo_video);
                     $item->delete();
                 }
-    
+
                 foreach ($request->file('files') as $file) {
                     $filename = time() . '_' . $file->getClientOriginalName();
                     $file->storeAs('public/gallery', $filename);
-    
+
                     $article->gallery()->create([
                         'photo_video' => $filename
                     ]);
@@ -199,7 +200,7 @@ class JournalistController extends Controller
                 'naslov' => 'required',
                 'rubrika' => 'required',
                 'tags' => 'required',
-                'files' =>'',
+                'files' => '',
             ]);
             if ($request->hasFile('naslovna')) {
                 $naslovna = $request->file('naslovna');
@@ -221,13 +222,13 @@ class JournalistController extends Controller
             $articleEditRequest->tags()->sync($tagIDs);
             if ($request->hasFile('files')) {
                 $galerijaFajlovi = $request->file('files');
-        
+
                 foreach ($galerijaFajlovi as $file) {
                     $imeFajla = time() . '_' . $file->getClientOriginalName();
                     $file->storeAs('public/gallery', $imeFajla);
-        
+
                     Gallery::create([
-                        'news_id' => $articleEditRequest->id, 
+                        'news_id' => $articleEditRequest->id,
                         'photo_video' => $imeFajla
                     ]);
                 }
