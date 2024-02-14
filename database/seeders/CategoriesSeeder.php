@@ -9,7 +9,7 @@ class CategoriesSeeder extends Seeder
 {
     public function run()
     {
-        // Dodajte 4 rubrike
+
         DB::table('categories')->insert([
             ['category' => 'Politika'],
             ['category' => 'Sport'],
