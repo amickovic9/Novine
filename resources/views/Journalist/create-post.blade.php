@@ -50,7 +50,7 @@ use App\Services\TextFormattingService;
 @include('navbar')
 
 <div class="container mt-4">
-    <form action="/cms-journalist/create-post" method="POST" onsubmit="submitForm()" enctype="multipart/form-data">
+    <form action="" method="POST" onsubmit="submitForm()" enctype="multipart/form-data">
         @csrf 
         <div class="form-group">
             <label for="naslov">Naslov članka</label>
@@ -60,9 +60,9 @@ use App\Services\TextFormattingService;
             <input type="file" name = "naslovna">
         </div>
        <div class="form-group">
-            <label for="tekst">Tekst članka</label>
+            <label for="tekst" name="tekst">Tekst članka</label>
             <div id="editor" name="tekst"></div> 
-            <input type="hidden" name="tekst">
+            <input type="hidden" name="tekst" name ="tekst">
         </div>
         
         <div class="form-group">
@@ -74,8 +74,8 @@ use App\Services\TextFormattingService;
             </select>
         </div>
         <div class="form-group">
-            <input id="tagovi" class="form-control" placeholder="Tagovi">
-        <div id="tagsContainer"></div>
+             <input id="tagovi" class="form-control" placeholder="Tagovi" name="tagovi">
+         <div id="tagsContainer"></div>
         <div class="form-group">
             Foto/video
                 
