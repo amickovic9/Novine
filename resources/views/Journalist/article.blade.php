@@ -8,15 +8,44 @@
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<style> 
+    .image-container {
+    display: inline-block;
+    width: 400px;
+    height: 300px;
+    margin-right: 20px;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+    .small-image1{
+        max-width: 100%;
+        max-height: 100%;
+    }
+    .small-image {
+        max-width: 200px;
+        max-height: 200px;
+        margin-right: 10px;
+    }
+
+    .small-video {
+        max-width: 200px;
+        max-height: 200px;
+        margin-right: 10px;
+    }
+</style> 
 <body>
     @include('navbar')
     <div class="container mt-4">
         <h1>Izmena članka</h1>
         <form action="/cms-journalist/article/{{$article->id}}/request-update" method="post" enctype="multipart/form-data">
-            @csrf
+        <br>    
+        @csrf
             <div class="form-group">
+            <div class="image-container">
                 <input type="file" class="form-control-file" id="naslovna" name="naslovna">
-                <img src="{{ asset('storage/naslovne/' . $article->naslovna) }}" alt="Naslovna slika">
+                <img src="{{ asset('storage/naslovne/' . $article->naslovna) }}" alt="Naslovna slika" class="small-image1">
+            </div>
             </div>
             <div class="form-group">
                 <label for="naslov">Naslov članka</label>
@@ -52,14 +81,14 @@
         @foreach ($article->gallery as $galleryItem)
             @if (Str::endsWith($galleryItem->photo_video, ['.mp4', '.mov', '.avi', '.mkv']))
                 <video width="320" height="240" controls>
-                    <source src="{{ asset('storage/gallery/' . $galleryItem->photo_video) }}" type="video/mp4">
+                    <source src="{{ asset('storage/gallery/' . $galleryItem->photo_video) }}" type="video/mp4" class="small-video">
                     Vaš pregledač ne podržava video element.
                 </video>
             @else
-                <img src="{{ asset('storage/gallery/' . $galleryItem->photo_video) }}" alt="{{ $galleryItem->photo_video }}">
+                <img src="{{ asset('storage/gallery/' . $galleryItem->photo_video) }}" alt="{{ $galleryItem->photo_video }}" class="small-image">
             @endif
 @endforeach
-</div>
+</div><br>
             @if ($updateRequestSent)
                 <p>Zahtev za izmenu je već poslat!</p>
             @else

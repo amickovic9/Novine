@@ -9,6 +9,15 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 </head>
 <style> 
+ @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+
+*{
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+     font-family: 'Montserrat', sans-serif;
+}
 .gallery {
   display: flex;
   align-items: center;
@@ -41,22 +50,6 @@
 
 .selected-image {
   border-color: #3C6A6F;
-}
-
-.large-image-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  border-radius: 5px;
-}
-
-.large-image {
-  max-width: 100%;
-  max-height: 60vh;
-  position: cover;
-  border-radius: 5px;
-  margin: 5px 5px;
 }
 
 .gallery {
@@ -101,6 +94,24 @@
             border-radius: 5px;
         }
 
+        .image-container {
+        width: 600px;
+        height: 500px;
+        margin: 0 auto;
+        overflow: hidden;
+        position: relative;
+        border-radius: 10px; 
+    
+    }
+
+    .centered-image {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 100%;
+        max-height: 100%;
+    }
 
 
 </style>
@@ -114,12 +125,15 @@
                 <label for="naslov">Naslov članka</label>
                 <input type="text" class="form-control" id="naslov" name="naslov" value="{{$article->naslov}}">
             </div>
-             <div class="form-group">
-                <label for="naslovna">Izmeni naslovnu sliku</label>
-                <input type="file" class="form-control-file" id="naslovna" name="naslovna">
-                <img src="{{ asset('storage/naslovne/' . $article->naslovna) }}" alt="Naslovna slika">
-            </div>
             <div class="form-group">
+              <label for="naslovna">Izmeni naslovnu sliku</label>
+              <input type="file" class="form-control-file" id="naslovna" name="naslovna">
+              <div class="image-container">
+                  <img src="{{ asset('storage/naslovne/' . $article->naslovna) }}" alt="Naslovna slika" class="centered-image">
+              </div>
+          </div>
+
+                      <div class="form-group">
                 <label for="tekst">Tekst artikla</label>
                 <div id="editor"></div>
                 <input type="hidden" id="tekst" name="tekst" value="{{$article->tekst}}">

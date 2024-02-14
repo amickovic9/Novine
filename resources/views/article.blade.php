@@ -217,6 +217,7 @@
 
 .gallery {
   display: flex;
+  flex-direction:column;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
@@ -247,138 +248,124 @@
 <body>
     @include('navbar')  
     <div class="container mt-4">
+    <div>
         <h1>{{$article['naslov']}}</h1>
         @if ($article['naslovna'])
-    <div class="d-flex justify-content-center align-items-center" style="height: 65vh;">
-        <div style="background-image: url('{{ asset('storage/naslovne/' . $article['naslovna']) }}'); background-size: contain; background-repeat: no-repeat; background-position: center; width: 100%; height: 60vh;">
-      </div>
+            <div class="d-flex justify-content-center align-items-center" style="height: 65vh;">
+                <div style="background-image: url('{{ asset('storage/naslovne/' . $article['naslovna']) }}'); background-size: contain; background-repeat: no-repeat; background-position: center; width: 100%; height: 60vh;"></div>
+            </div>
+        @endif
     </div>
-@endif
-        <div id="formatted-text">
-            {!! TextFormattingService::renderFormattedText($article['tekst']) !!}
-        </div>
-        <div class="gallery">
-    
+    <div id="formatted-text">
+        {!! TextFormattingService::renderFormattedText($article['tekst']) !!}
+    </div>
+    <div class="gallery">
     @if (count($article->gallery) > 0)
-    <div class="large-image-wrapper">
-        <button id="scrollLeft" class="nav-button"><i class="fas fa-chevron-left"></i></button>
-        <img class="large-image" src="{{ asset('storage/gallery/' . $article->gallery[0]->photo_video) }}" alt="{{ $article->gallery[0]->photo_video }}" />
-        <button id="scrollRight" class="nav-button"><i class="fas fa-chevron-right"></i></button>
-    </div>
+        <div id="image-track" data-mouse-down-at="0" data-prev-percentage="0">
+            @foreach ($article->gallery as $galleryItem)
+                @if (Str::endsWith($galleryItem->photo_video, ['.mp4', '.mov', '.avi', '.mkv']))
+                    <video class="image" width="320" height="240" controls>
+                        <source src="{{ asset('storage/gallery/' . $galleryItem->photo_video) }}" type="video/mp4">
+                        Vaš pregledač ne podržava video element.
+                    </video>
+                @else
+                    <img class="image" src="{{ asset('storage/gallery/' . $galleryItem->photo_video) }}" alt="{{ $galleryItem->photo_video }}">
+                @endif
+            @endforeach
+        </div>
+        <div class="large-image-wrapper">
+            <button id="scrollLeft" class="nav-button"><i class="fas fa-chevron-left"></i></button>
+            <img class="large-image" src="{{ asset('storage/gallery/' . $article->gallery[0]->photo_video) }}" alt="{{ $article->gallery[0]->photo_video }}" />
+            <button id="scrollRight" class="nav-button"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    @endif
+</div>
 
-    <div id="image-track" data-mouse-down-at="0" data-prev-percentage="0">
-        @foreach ($article->gallery as $galleryItem)
-            @if (Str::endsWith($galleryItem->photo_video, ['.mp4', '.mov', '.avi', '.mkv']))
-                <video class="image" width="320" height="240" controls>
-                    <source src="{{ asset('storage/gallery/' . $galleryItem->photo_video) }}" type="video/mp4">
-                    Vaš pregledač ne podržava video element.
-                </video>
-            @else
-                <img class="image" src="{{ asset('storage/gallery/' . $galleryItem->photo_video) }}" alt="{{ $galleryItem->photo_video }}">
-            @endif
-        @endforeach
-    </div>
-@endif
-
-
+    <div>
         <br>
         <br>
         <p>Iz rubrike: <a href="{{ route('home', ['pretraga' => $article->category->category]) }}">{{ $article->category->category }}</a></p>
-       
         <div class="tagovi">
-        @foreach ($article->tags as $tag)
-            <a href="{{ route('home', ['pretraga' => $tag->name]) }}">#{{ $tag->name }}</a>
-        @endforeach
-        </div> 
-
-       
-
-        <div class="likedislike">
-        <div class="likedislike">
-        <div class="dugmici-lajk">
-    <form action="/article/{{ $article->id }}/like" method="POST">
-        @csrf
-        @if ($liked)
-            <button type="submit" class="like-button button">
-                <i class="fa fa-thumbs-up" style="color: green;"></i>
-            </button>
-        @else
-            <button type="submit" class="like-button button">
-                <i class="fa fa-thumbs-up" style="color: white;"></i> 
-            </button>
-        @endif
-    </form>
-
-    <form action="/article/{{ $article->id }}/dislike" method="POST">
-        @csrf
-        @if ($disliked)
-            <button type="submit" class="dislike-button button">
-                <i class="fa fa-thumbs-down" style="color: red;"></i> 
-            </button>
-        @else
-            <button type="submit" class="dislike-button button">
-                <i class="fa fa-thumbs-down" style="color: white;"></i> 
-            </button>
-        @endif
-    </form>
-</div>
-</div>
- <div>
-        Svidjanja: {{ $likeCount }}
-        Nesvidjanja: {{ $dislikeCount }}
-    </div>
-
-</div>
-
-
-    
-   
-</div>
-<div style="width: 90%; margin: 0 auto;">
-    <h1 class="mt-4 naslov">Komentari</h1>
-    <form action="/add-comment" method="post" class="mt-3">
-        @csrf
-        <input type="number" name="article_id" hidden value="{{$article['id']}}">   
-        <div class="form-group">
-            <input type="text" required class="form-control" placeholder="Ime" name="user_name">    
+            @foreach ($article->tags as $tag)
+                <a href="{{ route('home', ['pretraga' => $tag->name]) }}">#{{ $tag->name }}</a>
+            @endforeach
         </div>
-        <div class="form-group">
-            <textarea class="form-control" required placeholder="Komentar" name="comment"></textarea> 
-        </div>
-        <button type="submit" class="custom-btn-primary">Dodaj komentar</button>    
-    </form>
-
-    <div class="mt-4">
-        @foreach ($comments as $comment)
-        <div class="card mb-3">
-            <div class="card-body">
-                <div class="komentar">
-                    <p class="card-text">Korisnik: {{ $comment->user_name }}</p>
-                    <p class="card-text">Komentar: {{ $comment->comment }}</p>
-                    <p class="card-text">Vreme: {{ $comment->created_at }}</p>
-                </div>
-                <div class="dugmici-lajk">
-                    <form action="/like-comment/{{ $comment->id }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-primary" style="background-color: {{ $comment->liked ? 'green' : '#17a2b8' }}; border-color: #17a2b8;">
-                            <i class="fa fa-thumbs-up" style="color: white;">     {{ $comment->likeCount }}</i>
+        <div class="likedislike">
+            <div class="dugmici-lajk">
+                <form action="/article/{{ $article->id }}/like" method="POST">
+                    @csrf
+                    @if ($liked)
+                        <button type="submit" class="like-button button">
+                            <i class="fa fa-thumbs-up" style="color: green;"></i>
                         </button>
-                    </form>
-
-                    <form action="/dislike-comment/{{ $comment->id }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-danger" style="background-color: {{ $comment->disliked ? 'red' : '' }};">
-                            <i class="fa fa-thumbs-down" style="color: white;">    {{ $comment->dislikeCount }}</i>
+                    @else
+                        <button type="submit" class="like-button button">
+                            <i class="fa fa-thumbs-up" style="color: white;"></i> 
                         </button>
-                    </form>
-                </div>
+                    @endif
+                </form>
+                <form action="/article/{{ $article->id }}/dislike" method="POST">
+                    @csrf
+                    @if ($disliked)
+                        <button type="submit" class="dislike-button button">
+                            <i class="fa fa-thumbs-down" style="color: red;"></i> 
+                        </button>
+                    @else
+                        <button type="submit" class="dislike-button button">
+                            <i class="fa fa-thumbs-down" style="color: white;"></i> 
+                        </button>
+                    @endif
+                </form>
+            </div>
+            <div>
+                Svidjanja: {{ $likeCount }}
+                Nesvidjanja: {{ $dislikeCount }}
             </div>
         </div>
-        @endforeach
+    </div>
+    <div style="width: 100%; margin: 0 auto;">
+        <h1 class="mt-4 naslov">Komentari</h1>
+        <form action="/add-comment" method="post" class="mt-3">
+            @csrf
+            <input type="number" name="article_id" hidden value="{{$article['id']}}">   
+            <div class="form-group">
+                <input type="text" required class="form-control" placeholder="Ime" name="user_name">    
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" required placeholder="Komentar" name="comment"></textarea> 
+            </div>
+            <button type="submit" class="custom-btn-primary">Dodaj komentar</button>    
+        </form>
+        <div class="mt-4">
+            @foreach ($comments as $comment)
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="komentar">
+                            <p class="card-text">Korisnik: {{ $comment->user_name }}</p>
+                            <p class="card-text">Komentar: {{ $comment->comment }}</p>
+                            <p class="card-text">Vreme: {{ $comment->created_at }}</p>
+                        </div>
+                        <div class="dugmici-lajk">
+                            <form action="/like-comment/{{ $comment->id }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-primary" style="background-color: {{ $comment->liked ? 'green' : '#17a2b8' }}; border-color: #17a2b8;">
+                                    <i class="fa fa-thumbs-up" style="color: white;">     {{ $comment->likeCount }}</i>
+                                </button>
+                            </form>
+                            <form action="/dislike-comment/{{ $comment->id }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-danger" style="background-color: {{ $comment->disliked ? 'red' : '' }};">
+                                    <i class="fa fa-thumbs-down" style="color: white;">    {{ $comment->dislikeCount }}</i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
     </div>
 </div>
-
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script>
         var quill = new Quill('#editor', {
             theme: 'snow'
@@ -393,5 +380,5 @@
     <script src="/js/script.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
-@include('footer')
+
 </html>

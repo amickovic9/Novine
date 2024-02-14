@@ -32,7 +32,31 @@
         .naslov { 
             font-size:1.5rem;
         }
-    </style>
+        .image-container {
+    display: inline-block;
+    width: 400px;
+    height: 300px;
+    margin-right: 20px;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+    .small-image1{
+        max-width: 100%;
+        max-height: 100%;
+    }
+    .small-image {
+        max-width: 200px;
+        max-height: 200px;
+        margin-right: 10px;
+    }
+
+    .small-video {
+        max-width: 200px;
+        max-height: 200px;
+        margin-right: 10px;
+    }
+        </style>
 </head>
 <body>
     @include('navbar')
@@ -54,15 +78,18 @@
                 <div class="card-body">
                     <h5 class="card-title">Zahtev za izmenu</h5>
                     <p>Stara Naslovna: 
-                        <img src="{{ asset('storage/naslovne/' . $editRequest->news->naslovna) }}" alt="Stara Naslovna">
+                    <div class="image-container">
+                        <img src="{{ asset('storage/naslovne/' . $editRequest->news->naslovna) }}" alt="Stara Naslovna" class="small-image1">
+</div>
                     </p>
 
                     <p>Nova Naslovna: 
                         @if($editRequest->naslovna == NULL)
                         <p>Ista je</p>
                         @else
-                        <img src="{{ asset('storage/naslovne/' . $editRequest->naslovna) }}" alt="Nova Naslovna">
-
+                        <div class="image-container">
+                        <img src="{{ asset('storage/naslovne/' . $editRequest->naslovna) }}" alt="Nova Naslovna" class="small-image1">
+                    </div>
                        @endif 
                     </p>
                     <p>Stari naslov: {{$editRequest->news ? $editRequest->news->naslov : 'Nije pronađeno'}}</p>
@@ -85,10 +112,10 @@
 @if ($editRequest->gallery && $editRequest->gallery->isNotEmpty())
     @foreach ($editRequest->gallery as $galleryItem)
         @if (Str::endsWith($galleryItem->photo_video, ['.jpg', '.jpeg', '.png', '.gif']))
-            <img src="{{ asset('storage/gallery/' . $galleryItem->photo_video) }}" alt="Nova Galerija">
+            <img src="{{ asset('storage/gallery/' . $galleryItem->photo_video) }}" alt="Nova Galerija" class="small-image">
         @elseif (Str::endsWith($galleryItem->photo_video, ['.mp4', '.avi', '.mov', '.wmv']))
-            <video controls>
-                <source src="{{ asset('storage/gallery/' . $galleryItem->photo_video) }}" type="video/mp4">
+            <video controls class="small-image">
+                <source src="{{ asset('storage/gallery/' . $galleryItem->photo_video) }}" type="video/mp4" >
                 Vaš pregledač ne podržava video zapise.
             </video>
         @else
@@ -98,7 +125,8 @@
 @else
     <p>Nije pronađeno</p>
 @endif
-
+<br>
+<br>
                     <a href="/cms/edit-request/{{$editRequest->id}}/allow" class="custom-btn-primary">Odobri izmene</a>
                     <a href="/cms/edit-request/{{$editRequest->id}}/decline" class="btn btn-danger">Odbij izmene</a>
                 </div>
