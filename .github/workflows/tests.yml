@@ -1,4 +1,4 @@
-name: Tests
+name: Run Tests
 
 on: 
   pull_request:
@@ -10,30 +10,44 @@ on:
 
 jobs:
   tests:
-    name: Run tests
+    name: Run PHP Tests
     runs-on: ubuntu-latest
+
     steps:
-    
-      - uses: actions/checkout@v2
-      - name: Install PHP
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 7.4.33
+
       - name: Copy .env
         run: |
-          cp php -r "file_exists('.env') || copy('.env.example', '.env');"
-        name: Install Dependencies
+          if [ ! -f '.env' ]; then cp .env.example .env; fi
+
+      - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
       - name: Generate key
         run: php artisan key:generate
+
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
+
       - name: Create Database
         run: |
           mkdir -p novine
-          touch novine.sql
+          touch novine/novine.sql
+
+      - name: Run Database Migrations
+        run: php artisan migrate
+
+      - name: Seed Database
+        run: php artisan db:seed
+
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
-          DB_CONNECTION: mysql
-          DB_DATABASE: novine.sql
+          DB_CONNECTION: sqlite
+          DB_DATABASE: :memory:  # Use an in-memory database for testing
         run: vendor/bin/phpunit
