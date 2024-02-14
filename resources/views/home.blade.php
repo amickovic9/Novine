@@ -106,18 +106,22 @@
     @include('navbar')
 
     <div class="container">
-        <form action="" method="GET">
-            <div class="form-row">
-                <div class="col-md-3 mb-3 mt-3 input">
-                    <input type="text" class="form-control" name="pretraga" id="" placeholder="Pretrazi najnovije vesti" value="{{ request()->input('pretraga') }}">
-                    <input type="date" name="date" value="{{ request()->input('date') }}">
-                </div>
-                <button type="submit" class="btn btn-primary  mb-3 mt-3" style="background-color: #17a2b8; border-color: #17a2b8;">
-                <i class="fas fa-search" style="color: white;"></i> </button>
+    <form action="" method="GET">
+    <div class="form-row align-items-end mt-3">
+        <div class="col-md-3 mb-3 input">
+            <input type="text" class="form-control" name="pretraga" placeholder="Pretraži najnovije vesti" value="{{ request()->input('pretraga') }}">
+        </div>
+        <div class="col-md-3 mb-3 input">
+            <input type="date" class="form-control" name="date" value="{{ request()->input('date') }}">
+        </div>
+        <div class="col-md-2 mb-3">
+            <button type="submit" class="btn btn-primary" style="background-color: #17a2b8; border-color: #17a2b8;">
+                <i class="fas fa-search" style="color: white;"></i> 
+            </button>
+        </div>
+    </div>
+</form>
 
-            </div>
-            
-        </form>
         <div class="row mt-4">
             @foreach ($news as $article)
             <div class="col-md-3 mb-4">
