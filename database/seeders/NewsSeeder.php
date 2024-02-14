@@ -39,7 +39,7 @@ class NewsSeeder extends Seeder
                 'draft' => 0,
             ]);
 
-            $imagePath = storage_path('naslovne/' . $imageFileName);
+            $imagePath = storage_path('/naslovne/' . $imageFileName);
             file_put_contents($imagePath, file_get_contents($faker->imageUrl(400, 400, 'cats')));
         }
     }
