@@ -27,6 +27,23 @@ use App\Services\TextFormattingService;
             color:white;
             transform:scale(1.1);
         }
+        #tagsContainer { 
+            margin-top: 10px;
+            font-size:12px;
+
+        }
+        .tag-box {
+            display: inline-block;
+            padding: 5px;
+            margin: 5px;
+            border-radius: 5px;
+            color: black;
+        }
+
+        .tags-frame {
+            padding: 5px;
+            border-radius: 5px;
+        }
 </style>
 <body>
 
@@ -43,9 +60,9 @@ use App\Services\TextFormattingService;
             <input type="file" name = "naslovna">
         </div>
        <div class="form-group">
-            <label for="tekst">Tekst članka</label>
+            <label for="tekst" name="tekst">Tekst članka</label>
             <div id="editor" name="tekst"></div> 
-            <input type="hidden" name="tekst">
+            <input type="hidden" name="tekst" name ="tekst">
         </div>
         
         <div class="form-group">
@@ -57,8 +74,8 @@ use App\Services\TextFormattingService;
             </select>
         </div>
         <div class="form-group">
-            <input type="text" name="tagovi" id="tagovi" class="form-control" placeholder="Tagovi">
-        </div>
+             <input id="tagovi" class="form-control" placeholder="Tagovi" name="tagovi">
+         <div id="tagsContainer"></div>
         <div class="form-group">
             Foto/video
                 
@@ -68,7 +85,7 @@ use App\Services\TextFormattingService;
         <button type="submit" class=" custom-btn-primary">Kreiraj objavu</button> 
     </form>
 </div>
-
+<script src="/js/script.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script> <!-- Skripta za Quill -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script >

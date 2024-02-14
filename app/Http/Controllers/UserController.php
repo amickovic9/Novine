@@ -70,15 +70,19 @@ class UserController extends Controller
                 });
             });
         }
-
+        if ($request->filled('date')) {
+            $date = $request->input('date');
+            $query->whereDate('created_at', '=', $date);
+        }
         $news = $query->orderBy('created_at', 'desc')->paginate(12);
+
 
         return view('home', ['news' => $news, 'categories' => $categories]);
     }
 
     public function showArticle(News $article)
     {
-        
+
         return view('article.show', ['article' => $article]);
     }
 
@@ -89,11 +93,11 @@ class UserController extends Controller
 
     public function likeComment(Comment $comment)
     {
-        $ipAddress = request()->ip(); 
+        $ipAddress = request()->ip();
         $existingLike = LikeDislikeComment::where('comment_id', $comment->id)
             ->where('ip_address', $ipAddress)
             ->first();
-    
+
         if ($existingLike) {
             if ($existingLike->like) {
                 $existingLike->delete();
@@ -110,17 +114,17 @@ class UserController extends Controller
                 'dislike' => false,
             ]);
         }
-    
+
         return back();
     }
-    
+
     public function dislikeComment(Comment $comment)
     {
-        $ipAddress = request()->ip(); 
+        $ipAddress = request()->ip();
         $existingLike = LikeDislikeComment::where('comment_id', $comment->id)
             ->where('ip_address', $ipAddress)
             ->first();
-    
+
         if ($existingLike) {
             if ($existingLike->dislike) {
                 $existingLike->delete();
@@ -137,7 +141,7 @@ class UserController extends Controller
                 'dislike' => true,
             ]);
         }
-    
+
         return back();
     }
-}    
+}

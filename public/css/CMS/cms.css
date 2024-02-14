@@ -24,7 +24,6 @@ header {
 
 .dugme {
     display: block;
-    
     padding: 10px 20px;
     background-color: #17a2b8;
     color: #fff;
@@ -69,4 +68,50 @@ header {
             margin: 5px;
         }
     }
-    
+    .dugme-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .dugme {
+        width: 50%;
+        }
+    .dugme.active {
+        background-color: #365487; }
+
+
+        .custom-btn-primary {
+            background-color: #17a2b8;
+            color:white;
+            padding: 9px 15px;
+            border-radius: 5px; 
+            transition:all ease-in-out 0.2s;
+            border:none;
+            margin: 10px  0px;
+            text-align:center;
+        }
+
+        .custom-btn-primary:hover {
+            background-color: #2780ba;
+            color:white;
+            transform:scale(1.01);
+            text-decoration:none;
+
+        }
+        .custom-btn-secondary {
+            background-color: #2780ba;
+            color:white;
+            padding: 9px 15px;
+            border-radius: 5px; 
+            transition:all ease-in-out 0.5s;
+            border:none;
+            width:100%;
+            text-align:center;
+        }
+
+        .custom-btn-secondary:hover {
+            background-color: #365487;
+            color:white;
+            transform:scale(1.01);
+            text-decoration:none
+        }

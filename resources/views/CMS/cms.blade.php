@@ -27,41 +27,7 @@
         .naslov { 
             font-size: 1.5rem;
         }
-        .custom-btn-primary {
-            background-color: #17a2b8;
-            color:white;
-            padding: 9px 15px;
-            border-radius: 5px; 
-            transition:all ease-in-out 0.2s;
-            border:none;
-            margin: 10px  0px;
-            text-align:center;
-        }
-
-        .custom-btn-primary:hover {
-            background-color: #2780ba;
-            color:white;
-            transform:scale(1.01);
-            text-decoration:none;
-
-        }
-        .custom-btn-secondary {
-            background-color: #2780ba;
-            color:white;
-            padding: 9px 15px;
-            border-radius: 5px; 
-            transition:all ease-in-out 0.5s;
-            border:none;
-            width:100%;
-            text-align:center;
-        }
-
-        .custom-btn-secondary:hover {
-            background-color: #365487;
-            color:white;
-            transform:scale(1.01);
-            text-decoration:none
-        }
+        
         .thead { 
             background-color: #2780ba;
             color: white;
@@ -72,16 +38,7 @@
         .h1-text { 
             color:black;
         }
-        .dugme-container {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .dugme {
-            width: 50%;
-            }
-        .dugme.active {
-            background-color: #365487; }
+        
 
     </style>
 </head>
@@ -89,10 +46,10 @@
     @include('navbar')
 <div class="content container">
 <div class="dugme-container">
-<a href="#" class="dugme" onclick="toggleEditUserContainer(this)">Upravljanje korisnicima</a>
-<a href="#" class="dugme" onclick="toggleTableArticle(this)">Upravljanje člancima</a>
-
+    <a href="#" class="dugme  btn-block mb-2" onclick="toggleEditUserContainer(this); setActiveButton(this)">Upravljanje korisnicima</a>
+    <a href="#" class="dugme btn-block" onclick="toggleTableArticle(this); setActiveButton(this)">Upravljanje člancima</a>
 </div>
+
  </div> 
     <div id="container-edit-user" class="container" style="display: none;">
     <h1 class="naslov">Upravljanje Korisnicima</h1>
@@ -148,10 +105,10 @@
 <div id="table-article" class="container" style="display: none;">
 <h1 class="naslov">Upravljanje člancima</h1>
 <div class="dugme-container">
-        <a href="/cms/create-post" class="dugme">Dodaj objavu</a>
-        <a href="/cms/categories" class="dugme">Upravljanje rubrikama</a>
-        <a href="/cms/delete-requests" class="dugme">Upravljanje zahtevima za brisanje</a>
-        <a href="/cms/edit-requests" class="dugme">Upravljanje zahtevima za izmene</a>
+        <a href="/cms/create-post" class="dugme btn-block mb-2">Dodaj objavu</a>
+        <a href="/cms/categories" class="dugme btn-block mb-2">Upravljanje rubrikama</a>
+        <a href="/cms/delete-requests" class="dugme btn-block mb-2">Upravljanje zahtevima za brisanje</a>
+        <a href="/cms/edit-requests" class="dugme btn-block" >Upravljanje zahtevima za izmene</a>
         </div>
         <form action="" class="form-inline">
     <div class="row align-items-end">
@@ -222,30 +179,6 @@
 </div>
 
     <script src="/js/script.js"></script>
-    <script>
-        function toggleEditUserContainer() {
-            document.getElementById('container-edit-user').style.display = 'block';
-            document.getElementById('table-article').style.display = 'none';
-            localStorage.setItem('activeTab', 'container-edit-user');
-        }
-
-        function toggleTableArticle() {
-            document.getElementById('table-article').style.display = 'block';
-            document.getElementById('container-edit-user').style.display = 'none';
-            localStorage.setItem('activeTab', 'table-article');
-        }
-
-        window.onload = function() {
-            var activeTab = localStorage.getItem('activeTab');
-            if (activeTab) {
-                if (activeTab === 'container-edit-user') {
-                    toggleEditUserContainer();
-                } else if (activeTab === 'table-article') {
-                    toggleTableArticle();
-                }
-            }
-        };
-    </script>
 </body>
 @include('footer')
 </html>

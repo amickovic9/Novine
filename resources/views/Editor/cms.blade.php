@@ -6,16 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>CMS</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/CMS/cms.css">
 </head>
 <style> 
      .btn-success1{
-        margin-top: 10px;
+        margin-left:10px;
         color: white;
         padding: 9px 15px;
         border-radius: 5px;
         transition: all ease-in-out 0.2s;
         border: none;
         background-color:#17a2b8 ;
+        border: 1px solid white;
+        font-size: 14px;
     }
      .btn-success1:hover{
             background-color: #2780ba;
@@ -23,16 +26,6 @@
             transform: scale(1.1);
             text-decoration: none;
         }
-    .col-md-5 { 
-        border-radius: 5px;
-        width:30%;
-        margin: 10px;
-        background-color :#17a2b8;
-        color:white; 
-        justify-content:center;
-        height: 6rem;
-        padding-top:10px;
-    }
     .thead { 
             background: #2780ba;
             color:white; 
@@ -40,29 +33,57 @@
     input[type="checkbox"] {
             accent-color:#17a2b8 ;    
         }
+    .naslov { 
+            font-size: 1.5rem;
+    }
+    .dugme-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .dugme {
+            width: 50%;
+            }
+        .dugme.active {
+            background-color: #365487; }
+            th:nth-child(4),
+        td:nth-child(4) {
+            max-width: 180px;
+            overflow: hidden; 
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
 </style> 
 <body>
     @include('navbar')
+    <div class="content container">
+    <div class="dugme-container">
+    <a href="#" class="dugme  btn-block mb-2" onclick="toggleEditUserContainer(this); setActiveButton(this)">Upravljanje korisnicima</a>
+    <a href="#" class="dugme  btn-block" onclick="toggleTableArticle(this); setActiveButton(this)">Upravljanje člancima</a>
+</div>
 
+
+ </div>
+ <div id="table-article" class="container" style="display: none;">
+<h1 class="naslov">Upravljanje člancima</h1>
     <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-5">
-            <h3 class="mt-4  mt-md-0">Zahtevi za brisanje:     <span>{{$deleteRequests}}</span></h3>
-               
-                @if ($deleteRequests > 0)
-                    <a href="/cms-editor/delete-requests" class="btn-success1">Vidi zahteve</a>
-                @endif
-            </div>
+    <div class="row">
+    <div class="col-md-6">
+        <h3 class="mt-4 mt-md-0" style="border-radius: 5px; margin: 10px; background-color: #17a2b8; color: white; display: flex; justify-content: center; align-items: center; height: 4rem;font-size:20px; padding-top: 10px;">Zahtevi za brisanje: <span>{{$deleteRequests}}</span>@if ($deleteRequests > 0)
+            <a href="/cms-editor/delete-requests" class="btn-success1">Vidi zahteve</a>
+        @endif</h3>
+        
+    </div>
+    <div class="col-md-6">
+        <h3 class="mt-4 mt-md-0" style="border-radius: 5px; margin: 10px; background-color: #17a2b8; color: white; display: flex; justify-content: center; align-items: center; height: 4rem;font-size:20px; padding-top: 10px;">Zahtevi za izmenu: <span>{{$updateRequests}}</span> @if ($updateRequests > 0)
+            <a href="/cms-editor/edit-requests" class="btn-success1"> Vidi zahteve</a>
+        @endif</h3>
+       
+    </div>
+</div>
 
-            <div class="col-md-5">
-                <h3 class="mt-4  mt-md-0">Zahtevi za izmenu:    <span>{{$updateRequests}}</span></h3>
-                
-                @if ($updateRequests > 0)
-                    <a href="/cms-editor/edit-requests" class="btn-success1"> Vidi zahteve</a>
-                @else
-                @endif
-            </div>
-        </div>
+
             <br>
         <a href="/cms-editor/create" class="btn-success1">Kreiraj objavu</a>
     </div>
@@ -138,6 +159,11 @@
             </table>
         </div>
     </div>
+    </div>
+
+    <div id="container-edit-user" class="container" style="display: none;">
+    <h1 class="naslov">Upravljanje Korisnicima</h1>
+
 
     <div class="container mt-4">
     <form action="" method="GET">
@@ -193,9 +219,10 @@
             </tbody>
         </table>
     </div>
-
+    </div>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/js/script.js"></script>
 </body>
 @include('footer')
 </html>

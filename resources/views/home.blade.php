@@ -83,14 +83,14 @@
         }
         .image-container {
              position: relative;
-             height: 12rem;
+             height: 10rem;
              overflow: hidden;
              
             }
 
         .category-badge {
             position: absolute;
-            bottom: 5px;
+            top: 5px;
             right: 5px;
             padding: 5px 10px;
             background-color: rgba(39,128,186, 0.6);
@@ -109,7 +109,8 @@
         <form action="" method="GET">
             <div class="form-row">
                 <div class="col-md-3 mb-3 mt-3 input">
-                    <input type="text" class="form-control" name="pretraga" id="naslov" placeholder="Pretrazi najnovije vesti" value="{{ request()->input('pretraga') }}">
+                    <input type="text" class="form-control" name="pretraga" id="" placeholder="Pretrazi najnovije vesti" value="{{ request()->input('pretraga') }}">
+                    <input type="date" name="date" value="{{ request()->input('date') }}">
                 </div>
                 <button type="submit" class="btn btn-primary  mb-3 mt-3" style="background-color: #17a2b8; border-color: #17a2b8;">
                 <i class="fas fa-search" style="color: white;"></i> </button>
