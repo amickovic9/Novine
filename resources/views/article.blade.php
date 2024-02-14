@@ -259,6 +259,13 @@
         </div>
         <div class="gallery">
     
+    @if (count($article->gallery) > 0)
+    <div class="large-image-wrapper">
+        <button id="scrollLeft" class="nav-button"><i class="fas fa-chevron-left"></i></button>
+        <img class="large-image" src="{{ asset('storage/gallery/' . $article->gallery[0]->photo_video) }}" alt="{{ $article->gallery[0]->photo_video }}" />
+        <button id="scrollRight" class="nav-button"><i class="fas fa-chevron-right"></i></button>
+    </div>
+
     <div id="image-track" data-mouse-down-at="0" data-prev-percentage="0">
         @foreach ($article->gallery as $galleryItem)
             @if (Str::endsWith($galleryItem->photo_video, ['.mp4', '.mov', '.avi', '.mkv']))
@@ -271,13 +278,9 @@
             @endif
         @endforeach
     </div>
-   
-</div>
-<div class="large-image-wrapper">
-    <button id="scrollLeft" class="nav-button"><i class="fas fa-chevron-left"></i></button>
-    <img class="large-image" src="" alt="" /> 
-    <button id="scrollRight" class="nav-button"><i class="fas fa-chevron-right"></i></button>
-</div>
+@endif
+
+
         <br>
         <br>
         <p>Iz rubrike: <a href="{{ route('home', ['pretraga' => $article->category->category]) }}">{{ $article->category->category }}</a></p>
