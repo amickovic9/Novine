@@ -124,7 +124,9 @@
                 <div class="card">
                     @if ($article['naslovna'])
                     <div class="image-container">
-                        <div class="category-badge">{{ $article->category->category }}</div>
+                        @if($article->category)
+                            <div class="category-badge">{{ $article->category->category }}</div>
+                        @endif
                         <img src="{{ asset('storage/naslovne/' . $article['naslovna']) }}" class="card-img-top" alt="Naslovna slika">
                     </div>
 

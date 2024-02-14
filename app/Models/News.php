@@ -14,6 +14,7 @@ class News extends Model
         'naslov',
         'tekst',
         'rubrika',
+        'draft',
     ];
     public function comments()
     {
