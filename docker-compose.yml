@@ -1,0 +1,70 @@
+version: "3.8" 
+
+services:
+
+    # PHP Service
+    php:
+        build:
+            context: .
+            target: php
+            args:
+                - APP_ENV=${APP_ENV}
+        environment:
+            - APP_ENV=${APP_ENV}
+            - CONTAINER_ROLE=app
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+        ports:
+            - 8000:8000
+        depends_on:
+            - database
+            - redis
+        command: bash -c "php artisan migrate --seed && php-fpm"
+
+
+        # Database Server
+    database:
+        image: mysql:8.0.36
+        ports:
+            - 3307:3306
+        environment:
+            - MYSQL_DATABASE=${DB_DATABASE}
+            - MYSQL_ALLOW_EMPTY_PASSWORD=yes  # Postavljanje opcije za praznu lozinku
+        volumes:
+            - db-data:/var/lib/mysql
+        
+
+    # Redis Server
+    redis:
+        image: redis:alpine
+        command: redis-server --appendonly yes --requirepass "${REDIS_PASSWORD}"
+        ports:
+            - 6379:6379
+
+    # Queue Server
+    queue:
+        build:
+            context: .
+            target: php
+            args:
+                - APP_ENV=${APP_ENV}
+        environment:
+            - APP_ENV=${APP_ENV}
+            - CONTAINER_ROLE=queue
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+
+    # Node Server
+    node:
+        build:
+            context: .
+            target: node
+        volumes:
+            - .:/usr/src
+            - ./node_modules:/usr/src/node_modules
+        tty: true
+
+volumes:
+    db-data:
